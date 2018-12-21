@@ -14,6 +14,14 @@ Templatekit is available from PyPI:
 
    pip install templatekit
 
+User guide
+==========
+
+.. toctree::
+   :maxdepth: 1
+
+   cli-reference
+
 Project information
 ===================
 
