@@ -7,3 +7,4 @@ install:
   - "pip install .[dev]"
 script:
   - "python setup.py test"
+  - "cd docs && make linkcheck && make html && cd ../"
