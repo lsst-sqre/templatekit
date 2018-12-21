@@ -14,6 +14,14 @@ Templatekit is available from PyPI:
 
    pip install templatekit
 
+Project information
+===================
+
+.. toctree::
+   :maxdepth: 1
+
+   changelog
+
 .. _Cookiecutter: https://cookiecutter.readthedocs.io/en/latest/
 .. _Jinja: http://jinja.pocoo.org
 .. _lsst/templates: https://github.com/lsst/templates
