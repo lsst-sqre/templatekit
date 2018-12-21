@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+from pathlib import Path
 
 package_name = 'templatekit'
 description = 'Tookit for rendering LSST project templates.'
@@ -14,6 +15,7 @@ pypi_classifiers = [
 ]
 keywords = ['lsst', 'cookiecutter']
 version = '0.1.0b1'
+readme = Path(__file__).parent / 'README.rst'
 
 # Core dependencies
 install_requires = [
@@ -45,6 +47,7 @@ setup_requires = [
 setup(
     name=package_name,
     description=description,
+    long_description=readme.read_text(),
     author=author,
     author_email=author_email,
     url=url,
