@@ -17,17 +17,17 @@ version = '0.1.0b1'
 
 # Core dependencies
 install_requires = [
-    'cookiecutter==1.6.0',
-    'Jinja2==2.10',
-    'scons==3.0.1',
+    'cookiecutter>=1.6.0,<2.0.0',
+    'Jinja2>=2.10,<3.0.0',
+    'scons>=3.0.1,<3.1.0',
     'click>=6.7,<7.0',
     'pyperclip>=1.6.0,<1.7.0'
 ]
 
 # Test dependencies
 tests_require = [
-    'pytest==3.4.1',
-    'pytest-flake8==0.9.1',
+    'pytest==4.0.2',
+    'pytest-flake8==1.0.2',
 ]
 tests_require += install_requires
 
@@ -39,7 +39,7 @@ extras_require = {
 
 # Setup-time dependencies
 setup_requires = [
-    'pytest-runner>=2.11.1,<3'
+    'pytest-runner>=4.2.0,<5.0.0'
 ]
 
 setup(
