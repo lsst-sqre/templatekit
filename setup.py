@@ -5,12 +5,12 @@ description = 'Tookit for rendering LSST project templates.'
 author = 'Association of Universities for Research in Astronomy'
 author_email = 'sqre-admin@lists.lsst.org'
 license = 'MIT'
-url = 'https://github.com/lsst/templates'
+url = 'https://github.com/lsst-sqre/templatekit'
 pypi_classifiers = [
     'Development Status :: 4 - Beta',
     'License :: OSI Approved :: MIT License',
-    'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6'
+    'Programming Language :: Python :: 3.7'
 ]
 keywords = ['lsst', 'cookiecutter']
 version = '0.1.0b1'
