@@ -14,7 +14,6 @@ pypi_classifiers = [
     'Programming Language :: Python :: 3.7'
 ]
 keywords = ['lsst', 'cookiecutter']
-version = '0.1.0b1'
 readme = Path(__file__).parent / 'README.rst'
 
 # Core dependencies
@@ -41,7 +40,8 @@ extras_require = {
 
 # Setup-time dependencies
 setup_requires = [
-    'pytest-runner>=4.2.0,<5.0.0'
+    'pytest-runner>=4.2.0,<5.0.0',
+    'setuptools_scm',
 ]
 
 setup(
