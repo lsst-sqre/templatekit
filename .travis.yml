@@ -1,10 +1,22 @@
 sudo: false
 language: python
-python:
-  - "3.6"
-  - "3.7-dev"
+matrix:
+  include:
+      - python: "3.6"
+      # Use the Python 3.7 build for PyPI deployments and doc uploads
+      - python: "3.7-dev"
+        env: PYPI_DEPLOY=true LTD_SKIP_UPLOAD=false
 install:
   - "pip install .[dev]"
 script:
   - "python setup.py test"
   - "cd docs && make linkcheck && make html && cd ../"
+after_success:
+  - "pip install ltd-conveyor"
+  - 'ltd upload --product "templatekit" --travis --dir docs/_build/html'
+env:
+  global:
+    # LSST the Docs credentials
+    - secure: "XZGwiF+xtzCy9sgE8wqL/nH5WDCo4izH68Y612TOOIG+9bHFmkOxGnAIaheLRAVNAzJK3pciQop+MVdZFVqtI1hyxp6dzvIt9a6XNMQiwBIlwWcU6rXuO2cvq5wCU8LIbrg7UZe9R5yJaToDPgW3VGDR925/Tse/qbiIm6hX/CwWWKYW6bLYNY/TG44muzjd2i+TM5yDZWivtL1xYfpF74r10uH5HZEBDPCSWiKpPppRrZBFr6YIWbmVtWIQzx7ogxpIlar+I85BjArvVy0bozG/yhvfxOK3To05ptFI5cHJzQyj1n2ycAFqQ8/znCw5Ycw2iY04THYm04ITlgkZs5nxdwtIN/3X78jdHHz2stSH0On4p/sAdVtMfucZEBzKSGFYmCO56ARKcKBUWKMpih2W2aG8UXV75OeRGEBBlmaKh8UcApxiHyPbcZGe0idaJJd5h5EBq9zf/oxJ1Xhud92L87YgQRieFr++6JbxDNZQb1YtNiliDBXnYe25rEgWccbrRSO+gqgqKqQFRMrb1QEJlGEhY59X/L0PbJ9o8Ao3wGJyQASpnfhFbBYMNghBhtyS8CBP9hJ3M8rUXBB/ZNb1a50S9sRFmg7dtfHqd8gqEuQc0pMu7GPBVODbvMwNAcfA4TpNfMo4lBfwucw9gX3n9Dzd3Qxs3u7V0avxC0U="
+    - secure: "lVMk2ScbJP0zBe52HP9/ZToblAIraZkWwU9zVSxsdKB9u7nDAEpLz2pfXVVYC+zS3B9V1D0gmlnEGcTYewW3ePhnKKtcMOBcDL3/AxaNlba7LdxEOvyHH3n4P5ahPTEjqoT4/uVAH6AitSAywW8O4cEGFsdN6IIxdwwVtFXLhJ1332lo1qasqSoxrCRojujYqCvQqe6nyANqH4x9JVLC8jdX3R58YVmx/g531BGMo15MIy8gnn9gZBNJenje8L4Cztd/kj3hcXhpTC4yYn3xH0PDnWRowrMQZjP28plJX3Tph9rLazscwF4W38hHqHFlUb9Y1gq/Vjdi1H0gXcnX6g6+RcUJZUcHJZY2FbFR8o+pStzaMFwsxnxjdVpCv62ttXuaUrU5wKV6jBr81FIGsySTIHNWzUeJC4kasCHrHAmV7y477/sFq1KpBeq1COXnWwpa3KAmgRCV4J7oih+R7BYxtHZiCYgyYaNjdGkD3fB1LFlYYMbFKOoMy872KYSHK+TcucCJ7BX7nZAlDrEJuWIbFWOuLT9ugcXXY5NfT/wAMAD6jca2xUbFzoJJhk84CfCOkvJ0T82NaBLOYYnmdAm9PppdX9aoahey3f/BzHOhVr3GzFlZG7acJGrrbikF1nWW0NcdK06gAMAu87X8JsL7BH3IA1PSMZ1rCFKpp4M="
+    - LTD_SKIP_UPLOAD=true  # disable doc deploys in regular test matrix
