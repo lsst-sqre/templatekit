@@ -10,8 +10,8 @@ url = 'https://github.com/lsst-sqre/templatekit'
 pypi_classifiers = [
     'Development Status :: 4 - Beta',
     'License :: OSI Approved :: MIT License',
-    'Programming Language :: Python :: 3.6'
-    'Programming Language :: Python :: 3.7'
+    'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
 ]
 keywords = ['lsst', 'cookiecutter']
 readme = Path(__file__).parent / 'README.rst'

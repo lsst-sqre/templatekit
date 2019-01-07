@@ -2,6 +2,11 @@
 Change log
 ##########
 
+0.1.1 (2019-01-07)
+==================
+
+- Fix typo in PyPI classifiers that prevented deployment to PyPI.
+
 0.1.0 (2019-01-07)
 ==================
 
