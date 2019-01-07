@@ -10,8 +10,8 @@ url = 'https://github.com/lsst-sqre/templatekit'
 pypi_classifiers = [
     'Development Status :: 4 - Beta',
     'License :: OSI Approved :: MIT License',
-    'Programming Language :: Python :: 3.6'
-    'Programming Language :: Python :: 3.7'
+    'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
 ]
 keywords = ['lsst', 'cookiecutter']
 readme = Path(__file__).parent / 'README.rst'
@@ -68,5 +68,6 @@ setup(
     extras_require=extras_require,
     entry_points={
         'console_scripts': ['templatekit = templatekit.scripts.main:main']
-    }
+    },
+    use_scm_version=True
 )
