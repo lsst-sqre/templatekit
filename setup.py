@@ -1,50 +1,59 @@
 from setuptools import setup, find_packages
+from pathlib import Path
 
 package_name = 'templatekit'
 description = 'Tookit for rendering LSST project templates.'
 author = 'Association of Universities for Research in Astronomy'
 author_email = 'sqre-admin@lists.lsst.org'
 license = 'MIT'
-url = 'https://github.com/lsst/templates'
+url = 'https://github.com/lsst-sqre/templatekit'
 pypi_classifiers = [
     'Development Status :: 4 - Beta',
     'License :: OSI Approved :: MIT License',
-    'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6'
+    'Programming Language :: Python :: 3.7'
 ]
 keywords = ['lsst', 'cookiecutter']
-version = '0.1.0b1'
+readme = Path(__file__).parent / 'README.rst'
 
 # Core dependencies
 install_requires = [
-    'cookiecutter==1.6.0',
-    'Jinja2==2.10',
-    'scons==3.0.1',
+    'cookiecutter>=1.6.0,<2.0.0',
+    'Jinja2>=2.10,<3.0.0',
+    'scons>=3.0.1,<3.1.0',
     'click>=6.7,<7.0',
     'pyperclip>=1.6.0,<1.7.0'
 ]
 
 # Test dependencies
 tests_require = [
-    'pytest==3.4.1',
-    'pytest-flake8==0.9.1',
+    'pytest==4.0.2',
+    'pytest-flake8==1.0.2',
 ]
 tests_require += install_requires
+
+# Sphinx documentation dependencies
+docs_require = [
+    'documenteer[pipelines]>=0.4.0,<0.5.0',
+    'sphinx-click>=1.2.0,<1.3.0',
+]
 
 # Optional dependencies (like for dev)
 extras_require = {
     # For development environments
-    'dev': tests_require
+    'dev': tests_require + docs_require
 }
 
 # Setup-time dependencies
 setup_requires = [
-    'pytest-runner>=2.11.1,<3'
+    'pytest-runner>=4.2.0,<5.0.0',
+    'setuptools_scm',
 ]
 
 setup(
     name=package_name,
     description=description,
+    long_description=readme.read_text(),
     author=author,
     author_email=author_email,
     url=url,

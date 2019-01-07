@@ -7,11 +7,6 @@ import pytest
 from templatekit.repo import Repo, FileTemplate, ProjectTemplate
 
 
-REPOPATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-"""Directory path of the root of the templates repository.
-"""
-
-
 @contextlib.contextmanager
 def work_dir(workdirname):
     """Temporarily change the current working directory (as a context manager).
@@ -24,50 +19,50 @@ def work_dir(workdirname):
         os.chdir(prev_cwd)
 
 
-def test_discovery_repo_at_root():
+def test_discovery_repo_at_root(templates_repo):
     """Test Repo.discover_repo given the root directory itself.
     """
-    with work_dir(REPOPATH):
+    with work_dir(templates_repo):
         repo = Repo.discover_repo(dirname='.')
         assert isinstance(repo, Repo)
 
 
-def test_discover_repo_in_subdir():
+def test_discover_repo_in_subdir(templates_repo):
     """Test Repo.discover_repo given a subdirectory of the root.
     """
-    with work_dir(REPOPATH):
+    with work_dir(templates_repo):
         repo = Repo.discover_repo(dirname='file_templates')
         assert isinstance(repo, Repo)
 
 
-def test_discover_repo_invalid():
+def test_discover_repo_invalid(templates_repo):
     """Test Repo.discover_repo an invalid starting directory.
     """
-    with work_dir(REPOPATH):
+    with work_dir(templates_repo):
         with pytest.raises(OSError):
             Repo.discover_repo(dirname=os.path.abspath('..'))
 
 
-def test_file_templates_dirname():
+def test_file_templates_dirname(templates_repo):
     """Test the file_templates_dirname property.
     """
-    with work_dir(REPOPATH):
+    with work_dir(templates_repo):
         repo = Repo('.')
         assert os.path.isdir(repo.file_templates_dirname)
 
 
-def test_project_templates_dirname():
+def test_project_templates_dirname(templates_repo):
     """Test the project_templates_dirname property.
     """
-    with work_dir(REPOPATH):
+    with work_dir(templates_repo):
         repo = Repo('.')
         assert os.path.isdir(repo.project_templates_dirname)
 
 
-def test_iter_file_templates():
+def test_iter_file_templates(templates_repo):
     """Test the iter_file_templates() method.
     """
-    with work_dir(REPOPATH):
+    with work_dir(templates_repo):
         repo = Repo('.')
         file_templates = list(repo.iter_file_templates())
         assert len(file_templates) > 0
@@ -75,10 +70,10 @@ def test_iter_file_templates():
             assert isinstance(file_template, FileTemplate)
 
 
-def test_iter_project_templates():
+def test_iter_project_templates(templates_repo):
     """Test the iter_project_templates() method.
     """
-    with work_dir(REPOPATH):
+    with work_dir(templates_repo):
         repo = Repo('.')
         project_templates = list(repo.iter_project_templates())
         assert len(project_templates) > 0
@@ -86,10 +81,10 @@ def test_iter_project_templates():
             assert isinstance(project_template, ProjectTemplate)
 
 
-def test_getitem():
+def test_getitem(templates_repo):
     """Test key access for templates.
     """
-    with work_dir(REPOPATH):
+    with work_dir(templates_repo):
         repo = Repo('.')
         with pytest.raises(KeyError):
             repo['whatwhat']
@@ -103,10 +98,10 @@ def test_getitem():
         assert example_project_template.name == 'example_project'
 
 
-def test_contains():
+def test_contains(templates_repo):
     """Test contains delegated through __iter__.
     """
-    with work_dir(REPOPATH):
+    with work_dir(templates_repo):
         repo = Repo('.')
 
         assert 'copyright' in repo
