@@ -6,6 +6,7 @@ Change log
 ==================
 
 - Fix typo in PyPI classifiers that prevented deployment to PyPI.
+- Fix setup.py so that setuptools_scm is activated.
 
 0.1.0 (2019-01-07)
 ==================

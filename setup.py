@@ -68,5 +68,6 @@ setup(
     extras_require=extras_require,
     entry_points={
         'console_scripts': ['templatekit = templatekit.scripts.main:main']
-    }
+    },
+    use_scm_version=True
 )
