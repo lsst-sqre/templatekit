@@ -211,7 +211,17 @@ class BaseTemplate(object):
             message = 'File template directory {} not found.'.format(self.path)
             raise OSError(message)
 
+        config_path = os.path.join(self.path, 'templatekit.yaml')
+        if os.path.exists(config_path):
+            with open(config_path, 'r') as f:
+                config_data = yaml.safe_load(f)
+        else:
+            config_data = {}
+        config = TemplateConfig(config_data)
+
         self._validate_template_dir()
+
+        self.config = config.normalize(self)
 
     def _validate_template_dir(self):
         """Run a quick set of checks that this is in fact a template
