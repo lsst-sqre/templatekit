@@ -22,7 +22,9 @@ install_requires = [
     'Jinja2>=2.10,<3.0.0',
     'scons>=3.0.1,<3.1.0',
     'click>=6.7,<7.0',
-    'pyperclip>=1.6.0,<1.7.0'
+    'pyperclip>=1.6.0,<1.7.0',
+    'PyYAML>=3.13,<4.0',
+    'Cerberus>=1.2,<2.0'
 ]
 
 # Test dependencies

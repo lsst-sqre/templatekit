@@ -1,11 +1,18 @@
 """Template repository APIs.
 """
 
-__all__ = ('Repo', 'FileTemplate', 'ProjectTemplate', 'BaseTemplate')
+__all__ = ('Repo', 'FileTemplate', 'ProjectTemplate', 'BaseTemplate',
+           'TemplateConfig')
 
+import collections.abc
 import os
+import functools
 import itertools
 import logging
+from pathlib import Path
+
+import yaml
+import cerberus
 
 
 class Repo(object):
@@ -275,3 +282,55 @@ class ProjectTemplate(BaseTemplate):
         Raised if ``path`` is a directory that does not contain a recognizable
         template.
     """
+
+
+@functools.lru_cache()
+def get_config_validator():
+    """Get a validator for ``templatekit.yaml`` configuration files.
+
+    This function is cached.
+
+    Returns
+    -------
+    validator : `cerberus.Validator`
+        A Cerberus validator based on the ``configschema.yaml`` schema.
+    """
+    configpath = Path(__file__).parent / 'configschema.yaml'
+    schema = yaml.safe_load(configpath.read_text())
+    validator = cerberus.Validator(schema)
+    return validator
+
+
+class TemplateConfig(collections.abc.Mapping):
+    """Represents the configuration for a template, derived from a
+    templatekit.yaml file.
+
+    Parameters
+    ----------
+    data : `dict`
+        Configuration, parsed from a ``templatekit.yaml`` file.
+
+    Notes
+    -----
+    Access individual configurations on a ``TemplateConfig`` instance like
+    keys in a dictionary.
+    """
+
+    def __init__(self, data):
+        self.data = data
+        self._validator = get_config_validator()
+
+        if self._validator.validate(data) is False:
+            print('Validation errors:')
+            print(self._validator.errors)
+            raise RuntimeError('Configuration syntax error')
+
+    def __getitem__(self, key):
+        return self.data[key]
+
+    def __len__(self):
+        return len(self.data)
+
+    def __iter__(self):
+        for k in self.data:
+            yield k

@@ -1,0 +1,16 @@
+# Schema for templatekit.yaml files. This schema works with
+# [Cerberus](http://docs.python-cerberus.org).
+
+# Name of the template. This is the label used as the menu option in Slack.
+name:
+  type: "string"
+  minlength: 1
+  maxlength: 75
+  required: False
+
+# Name of the menu group that this template belongs to in Slack.
+group:
+  type: "string"
+  minlength: 1
+  maxlength: 75
+  required: False
