@@ -35,3 +35,16 @@ def test_templateconfig_invalid():
     }
     with pytest.raises(RuntimeError):
         TemplateConfig(c)
+
+
+def test_templateconfig_normalize_name():
+    class MockTemplate:
+        name = 'my_template'
+
+    mock_template = MockTemplate()
+    c = TemplateConfig({})
+    assert 'name' not in c
+
+    c2 = c.normalize(mock_template)
+    assert c2['name'] == 'my_template'
+    assert c2['group'] == 'General'

@@ -4,6 +4,7 @@
 __all__ = ('Repo', 'FileTemplate', 'ProjectTemplate', 'BaseTemplate',
            'TemplateConfig')
 
+from copy import deepcopy
 import collections.abc
 import os
 import functools
@@ -334,3 +335,27 @@ class TemplateConfig(collections.abc.Mapping):
     def __iter__(self):
         for k in self.data:
             yield k
+
+    def normalize(self, template):
+        """Normalize the template configuration by adding defaults for any
+        missing configurations.
+
+        Parameters
+        ----------
+        template : `BaseTemplate`
+            A template instance.
+
+        Returns
+        -------
+        template_config : `TemplateConfig`
+            A new template configuration instance where all defaults are set.
+        """
+        data = deepcopy(self.data)
+
+        if 'name' not in data:
+            data['name'] = template.name
+
+        if 'group' not in data:
+            data['group'] = 'General'
+
+        return TemplateConfig(data)
