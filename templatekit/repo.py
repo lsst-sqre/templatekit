@@ -11,6 +11,7 @@ import functools
 import itertools
 import logging
 from pathlib import Path
+import json
 
 import yaml
 import cerberus
@@ -205,6 +206,7 @@ class BaseTemplate(object):
 
     def __init__(self, path):
         super().__init__()
+        self._cookiecutter_data = None
         self._log = logging.getLogger(__name__)
         self.path = os.path.abspath(path)
         if not os.path.isdir(self.path):
@@ -248,6 +250,15 @@ class BaseTemplate(object):
         """Path of the cookiecutter.json file (`str`).
         """
         return os.path.join(self.path, 'cookiecutter.json')
+
+    @property
+    def cookiecutter(self):
+        """The data from the ``cookiecutter.json`` file.
+        """
+        if self._cookiecutter_data is None:
+            with open(self.cookiecutter_json_path) as f:
+                self._cookiecutter_data = json.load(f)
+        return self._cookiecutter_data
 
 
 class FileTemplate(BaseTemplate):
