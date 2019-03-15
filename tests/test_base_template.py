@@ -19,10 +19,10 @@ def test_validation(templates_repo):
         os.path.join(templates_repo, 'file_templates/license_gplv3'))
     assert isinstance(project_template_exists, BaseTemplate)
 
-    with pytest.raises(OSError):
+    with pytest.raises(ValueError):
         BaseTemplate(os.path.join(templates_repo, 'file_templates/not_here'))
 
-    with pytest.raises(OSError):
+    with pytest.raises(ValueError):
         BaseTemplate(
             os.path.join(templates_repo, 'project_templates/not_here'))
 

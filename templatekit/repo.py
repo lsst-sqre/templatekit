@@ -209,28 +209,29 @@ class BaseTemplate(object):
         self._cookiecutter_data = None
         self._log = logging.getLogger(__name__)
         self.path = os.path.abspath(path)
-        if not os.path.isdir(self.path):
-            message = 'File template directory {} not found.'.format(self.path)
-            raise OSError(message)
-
-        config_path = os.path.join(self.path, 'templatekit.yaml')
-        if os.path.exists(config_path):
-            with open(config_path, 'r') as f:
-                config_data = yaml.safe_load(f)
-        else:
-            config_data = {}
-        config = TemplateConfig(config_data)
 
         self._validate_template_dir()
 
+        with open(self.templatekit_yaml_path, 'r') as f:
+            config_data = yaml.safe_load(f)
+        config = TemplateConfig(config_data)
+        # Add default from cookiecutter.json
         self.config = config.normalize(self)
 
     def _validate_template_dir(self):
         """Run a quick set of checks that this is in fact a template
         repository, with a cookiecutter.json directory, etc.
         """
+        if not os.path.isdir(self.path):
+            message = 'File template directory {} not found.'.format(self.path)
+            raise ValueError(message)
+
         if not os.path.isfile(self.cookiecutter_json_path):
             message = 'cookiecutter.json not found in {}'.format(self.path)
+            raise ValueError(message)
+
+        if not os.path.isfile(self.templatekit_yaml_path):
+            message = 'templatekit.yaml not found in {}'.format(self.path)
             raise ValueError(message)
 
     def __str__(self):
@@ -244,6 +245,12 @@ class BaseTemplate(object):
         """Name of the template (`str`).
         """
         return os.path.split(self.path)[-1]
+
+    @property
+    def templatekit_yaml_path(self):
+        """Path of the templatekit.yaml file (`str`).
+        """
+        return os.path.join(self.path, 'templatekit.yaml')
 
     @property
     def cookiecutter_json_path(self):
