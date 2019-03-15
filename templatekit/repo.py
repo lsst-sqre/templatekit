@@ -326,7 +326,7 @@ def get_config_validator():
     """
     configpath = Path(__file__).parent / 'configschema.yaml'
     schema = yaml.safe_load(configpath.read_text())
-    validator = cerberus.Validator(schema)
+    validator = cerberus.Validator(schema, purge_unknown=True)
     return validator
 
 
@@ -355,6 +355,9 @@ class TemplateConfig(collections.abc.Mapping):
             print('Data:')
             print(json.dumps(data, sort_keys=True, indent=2))
             raise RuntimeError('Configuration syntax error')
+
+        # Apply Cereberus's schema-based normalization
+        self.data = self._validator.normalized(self.data)
 
     def __getitem__(self, key):
         return self.data[key]
@@ -422,7 +425,7 @@ class TemplateConfig(collections.abc.Mapping):
         - Add options that exist in the cookiecutter.json file if the options
           aren't explicitly set.
         """
-        if 'options' not in field:
+        if 'options' not in field and 'preset_options' not in field:
             field['options'] = []
             # Add options from cookiecutter.json
             for option_value in template.cookiecutter[field['key']]:
@@ -440,7 +443,7 @@ class TemplateConfig(collections.abc.Mapping):
         - Add placeholder information found in the cookiecutter.json file
           if an explicit placeholder isn't set.
         """
-        if 'placeholder' not in field:
+        if 'placeholder' not in field or len(field['placeholder']) == 0:
             field['placeholder'] = template.cookiecutter[field['key']]
         return field
 

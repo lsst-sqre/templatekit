@@ -28,8 +28,8 @@ def test_templateconfig_valid():
 
     # Test mapping methods
     assert config['name'] == 'Python'
-    assert len(config) == 2
-    assert set(['name', 'group']) == set([k for k in config])
+    assert len(config) == 3
+    assert set(['name', 'group', 'dialog_title']) == set([k for k in config])
 
 
 def test_templateconfig_invalid():

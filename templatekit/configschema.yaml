@@ -68,6 +68,10 @@ dialog_fields:
         type: "string"
         maxlength: 75
         required: False
+      # Flag indicating if the field is optional (for Slack's validators)
+      optional:
+        type: "boolean"
+        default: False
       # Options for a select component
       options:
         type: "list"
