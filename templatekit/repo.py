@@ -344,7 +344,9 @@ class TemplateConfig(collections.abc.Mapping):
 
         if self._validator.validate(data) is False:
             print('Validation errors:')
-            print(self._validator.errors)
+            print(json.dumps(self._validator.errors, sort_keys=True, indent=2))
+            print('Data:')
+            print(json.dumps(data, sort_keys=True, indent=2))
             raise RuntimeError('Configuration syntax error')
 
     def __getitem__(self, key):
