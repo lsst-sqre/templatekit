@@ -381,4 +381,64 @@ class TemplateConfig(collections.abc.Mapping):
         if 'group' not in data:
             data['group'] = 'General'
 
+        if 'dialog_fields' not in data:
+            # Need to get the dialog fields from the cookiecutter.json file
+            data['dialog_fields'] = []
+            for key in template.cookiecutter:
+                if key.startswith('_'):
+                    # skip things like "_extensions"
+                    continue
+                elif isinstance(template.cookiecutter[key], str):
+                    data['dialog_fields'].append({
+                        'key': key,
+                        'label': self._truncate(key, 75),
+                        'component': 'text'
+                    })
+                elif isinstance(template.cookiecutter[key], list):
+                    data['dialog_fields'].append({
+                        'key': key,
+                        'label': self._truncate(key, 75),
+                        'component': 'select'
+                    })
+
+        for field in data['dialog_fields']:
+            if field['component'] == 'select':
+                self._normalize_select_field(field, template)
+            elif field['component'] == 'text':
+                self._normalize_text_field(field, template)
+
         return TemplateConfig(data)
+
+    def _normalize_select_field(self, field, template):
+        """Normalize a "select" component field.
+
+        - Add options that exist in the cookiecutter.json file if the options
+          aren't explicitly set.
+        """
+        if 'options' not in field:
+            field['options'] = []
+            # Add options from cookiecutter.json
+            for option_value in template.cookiecutter[field['key']]:
+                # Enforce Slack length limit on the label
+                option_label = self._truncate(option_value, 75)
+                field['options'].append({
+                    'label': option_label,
+                    'value': option_label,  # also needs truncation
+                    'template_value': option_value,
+                })
+
+    def _normalize_text_field(self, field, template):
+        """Normalize text field components.
+
+        - Add placeholder information found in the cookiecutter.json file
+          if an explicit placeholder isn't set.
+        """
+        if 'placeholder' not in field:
+            field['placeholder'] = template.cookiecutter[field['key']]
+        return field
+
+    def _truncate(self, text, length):
+        if isinstance(text, str) and len(text) > length:
+            return text[:length - 1] + "…"
+        else:
+            return text

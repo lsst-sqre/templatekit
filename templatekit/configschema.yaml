@@ -14,3 +14,80 @@ group:
   minlength: 1
   maxlength: 75
   required: False
+
+# Title to use for the Slack dialog.
+dialog_title:
+  type: "string"
+  minlength: 1
+  maxlength: 24
+  required: False
+  default: "Configure template"
+
+# List of the fields in the Slack dialog.
+# Slack supports up to 5 fields.
+dialog_fields:
+  type: "list"
+  maxlength: 5
+  required: False
+  schema:
+    type: "dict"
+    schema:
+      # Human-readable label
+      label:
+        type: "string"
+        required: True
+      # Name of the cookiecutter variable the field corresponds to.
+      key:
+        type: "string"
+        required: True
+      # Type of component
+      component:
+        type: "string"
+        required: True
+        allowed:
+          - "select"
+          - "text"
+          - "textarea"
+      # Subtype of a "text" component
+      text_subtype:
+        type: "string"
+        allowed:
+          - "email"
+          - "tel"
+          - "number"
+          - "url"
+          - "plain"
+        default: "plain"
+      # Placeholder test for text components
+      placeholder:
+        type: "string"
+        maxlength: 75
+        default: ""
+      # Hint for text and text area components
+      hint:
+        type: "string"
+        maxlength: 75
+        required: False
+      # Options for a select component
+      options:
+        type: "list"
+        schema:
+          type: "dict"
+          schema:
+            # Human-visible label for the option. Slack limits the length to
+            # 75 characters.
+            label:
+              type: "string"
+              required: False
+              minlength: 1
+              maxlength: 75
+            # The internal "value" for the Slack API. Also limited.
+            value:
+              type: "string"
+              required: True
+              minlength: 1
+              maxlength: 75
+            template_value:
+              type: "string"
+              required: True
+              minlength: 1

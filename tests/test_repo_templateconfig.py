@@ -1,10 +1,13 @@
 """Tests for the templatekit.repo.TemplateConfig class.
 """
 
+from pathlib import Path
+
 import cerberus
 import pytest
 
-from templatekit.repo import TemplateConfig, get_config_validator
+from templatekit.repo import (TemplateConfig, get_config_validator,
+                              FileTemplate)
 
 
 def test_get_config_validator():
@@ -41,10 +44,32 @@ def test_templateconfig_normalize_name():
     class MockTemplate:
         name = 'my_template'
 
+    configdata = {
+        'dialog_fields': []
+    }
+
     mock_template = MockTemplate()
-    c = TemplateConfig({})
+    c = TemplateConfig(configdata)
     assert 'name' not in c
 
     c2 = c.normalize(mock_template)
     assert c2['name'] == 'my_template'
     assert c2['group'] == 'General'
+
+
+def test_implicitselect():
+    """Test building a configuration from tests/data/config/implicitselect
+
+    This shows how a select menu would work.
+    """
+    template_path = Path(__file__).parent / 'data' / 'config' \
+        / 'implicitselect'
+    template = FileTemplate(str(template_path))
+    c = template.config
+
+    assert c['name'] == 'COPYRIGHT file'
+    assert c['group'] == 'General'  # normalized
+    assert c['dialog_title'] == 'Create a COPYRIGHT'
+    assert c['dialog_fields'][0]['label'] == 'Copyright holder'
+    assert len(c['dialog_fields']) == 1  # don't add extra variables as fields
+    assert 'options' in c['dialog_fields'][0]
