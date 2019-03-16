@@ -120,3 +120,27 @@ dialog_fields:
                 type: "string"
               valueschema:
                 type: "string"
+      # Grouped preset options menu
+      preset_groups:
+        type: "list"
+        schema:
+          type: "dict"
+          schema:
+            group_label:
+              type: "string"
+              maxlength: 75
+              minlength: 1
+              required: True
+            options:
+              type: "list"
+              schema:
+                type: "dict"
+                schema:
+                  label:
+                    type: "string"
+                  variables:
+                    type: "dict"
+                    keyschema:
+                      type: "string"
+                    valueschema:
+                      type: "string"

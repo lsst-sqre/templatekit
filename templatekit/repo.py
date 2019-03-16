@@ -425,9 +425,12 @@ class TemplateConfig(collections.abc.Mapping):
         - Add options that exist in the cookiecutter.json file if the options
           aren't explicitly set.
         """
-        if 'options' not in field and 'preset_options' not in field:
-            field['options'] = []
+        if 'preset_options' in field or 'preset_groups' in field:
+            # The schemas force these to be fully specified in templatekit.yaml
+            return
+        elif 'options' not in field:
             # Add options from cookiecutter.json
+            field['options'] = []
             for option_value in template.cookiecutter[field['key']]:
                 # Enforce Slack length limit on the label
                 option_label = self._truncate(option_value, 75)

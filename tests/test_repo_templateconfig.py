@@ -85,3 +85,15 @@ def test_preset():
     c = template.config
 
     assert 'preset_options' in c['dialog_fields'][0]
+
+
+def test_preset_groups():
+    """Test building a configuration from tests/data/config/preset_groups.
+
+    This shows the "preset_groups" feature.
+    """
+    template_path = Path(__file__).parent / 'data' / 'config' / 'preset_groups'
+    template = FileTemplate(str(template_path))
+    c = template.config
+
+    assert 'preset_groups' in c['dialog_fields'][0]
