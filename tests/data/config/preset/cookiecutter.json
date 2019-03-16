@@ -1,0 +1,12 @@
+{
+  "handle": [
+    "dmtn",
+    "sqr",
+    "smtn"
+  ],
+  "github_org": [
+    "lsst-dm",
+    "lsst-sqre",
+    "lsst-sims"
+  ]
+}

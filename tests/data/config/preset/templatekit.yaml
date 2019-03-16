@@ -1,0 +1,21 @@
+name: "Technote (reStructuredText)"
+dialog_title: "Create a technote"
+dialog_fields:
+  - label: "Choose a document series"
+    component: "select"
+    preset_options:
+      - label: "DMTN"
+        value: "dmtn"
+        presets:
+          handle: "dmtn"
+          github_org: "lsst-dm"
+      - label: "SQR"
+        value: "sqr"
+        presets:
+          handle: "sqr"
+          github_org: "lsst-sqre"
+      - label: "SMTN"
+        value: "smtn"
+        presets:
+          handle: "smtn"
+          github_org: "lsst-sims"

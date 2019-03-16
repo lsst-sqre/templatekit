@@ -73,3 +73,15 @@ def test_implicitselect():
     assert c['dialog_fields'][0]['label'] == 'Copyright holder'
     assert len(c['dialog_fields']) == 1  # don't add extra variables as fields
     assert 'options' in c['dialog_fields'][0]
+
+
+def test_preset():
+    """Test building a configuration from tests/data/config/preset.
+
+    This shows the "preset_options" feature.
+    """
+    template_path = Path(__file__).parent / 'data' / 'config' / 'preset'
+    template = FileTemplate(str(template_path))
+    c = template.config
+
+    assert 'preset_options' in c['dialog_fields'][0]

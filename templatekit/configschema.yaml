@@ -37,9 +37,10 @@ dialog_fields:
         type: "string"
         required: True
       # Name of the cookiecutter variable the field corresponds to.
+      # Not needed when using preset_options
       key:
         type: "string"
-        required: True
+        required: False
       # Type of component
       component:
         type: "string"
@@ -91,7 +92,31 @@ dialog_fields:
               required: True
               minlength: 1
               maxlength: 75
+            # The actual corresponding value that goes into the template.
             template_value:
               type: "string"
               required: True
               minlength: 1
+      # Options for a preset option menu
+      preset_options:
+        type: "list"
+        schema:
+          type: "dict"
+          schema:
+            label:
+              type: "string"
+              required: True
+              minlength: 1
+              maxlength: 75
+            value:
+              type: "string"
+              required: True
+              minlength: 1
+              maxlength: 75
+            # The cookiecutter.json keys and values this preset corresponds to.
+            presets:
+              type: "dict"
+              keyschema:
+                type: "string"
+              valueschema:
+                type: "string"
