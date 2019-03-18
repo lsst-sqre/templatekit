@@ -7,35 +7,35 @@ dialog_fields:
       - group_label: "LSST Science Pipelines"
         options:
           - label: "Python"
-            variables:
+            presets:
               stack_name: "LSST Science Pipelines"
               base_package: "base"
               uses_python: "True"
               has_tasks: "False"
               uses_cpp: "False"
           - label: "Python + Tasks"
-            variables:
+            presets:
               stack_name: "LSST Science Pipelines"
               base_package: "base"
               uses_python: "True"
               has_tasks: "False"
               uses_cpp: "False"
           - label: "C++ + Python + Tasks"
-            variables:
+            presets:
               stack_name: "LSST Science Pipelines"
               base_package: "base"
               uses_python: "True"
               has_tasks: "True"
               uses_cpp: "True"
           - label: "C++ + Python"
-            variables:
+            presets:
               stack_name: "LSST Science Pipelines"
               base_package: "base"
               uses_python: "True"
               has_tasks: "False"
               uses_cpp: "True"
           - label: "C++"
-            variables:
+            presets:
               stack_name: "LSST Science Pipelines"
               base_package: "base"
               uses_python: "False"
@@ -44,36 +44,36 @@ dialog_fields:
       - group_label: "Standalone"
         options:
           - label: "Python"
-            variables:
+            presets:
               stack_name: "None"
               base_package: "sconsUtils"
               uses_python: "True"
               has_tasks: "False"
               uses_cpp: "False"
           - label: "Python + Tasks"
-            variables:
+            presets:
               stack_name: "None"
               base_package: "sconsUtils"
               uses_python: "True"
               has_tasks: "False"
               uses_cpp: "False"
           - label: "C++ + Python + Tasks"
-            variables:
-              stack_name: "LSST Science Pipelines"
+            presets:
+              stack_name: "None"
               base_package: "base"
               uses_python: "sconsUtils"
               has_tasks: "True"
               uses_cpp: "True"
           - label: "C++ + Python"
-            variables:
-              stack_name: "LSST Science Pipelines"
+            presets:
+              stack_name: "None"
               base_package: "sconsUtils"
               uses_python: "True"
               has_tasks: "False"
               uses_cpp: "True"
           - label: "C++"
-            variables:
-              stack_name: "LSST Science Pipelines"
+            presets:
+              stack_name: "None"
               base_package: "sconsUtils"
               uses_python: "False"
               has_tasks: "False"

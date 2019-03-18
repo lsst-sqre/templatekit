@@ -138,7 +138,7 @@ dialog_fields:
                 schema:
                   label:
                     type: "string"
-                  variables:
+                  presets:
                     type: "dict"
                     keyschema:
                       type: "string"
