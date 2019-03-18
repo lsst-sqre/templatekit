@@ -1,0 +1,13 @@
+{
+  "stack_name": [
+    "LSST Science Pipelines",
+    "None"
+  ],
+  "base_package": [
+    "base",
+    "sconsUtils"
+  ],
+  "uses_packpage": [true, false],
+  "uses_cpp": [true, false],
+  "has_tasks": [true, false]
+}

@@ -1,11 +1,20 @@
 """Template repository APIs.
 """
 
-__all__ = ('Repo', 'FileTemplate', 'ProjectTemplate', 'BaseTemplate')
+__all__ = ('Repo', 'FileTemplate', 'ProjectTemplate', 'BaseTemplate',
+           'TemplateConfig')
 
+from copy import deepcopy
+import collections.abc
 import os
+import functools
 import itertools
 import logging
+from pathlib import Path
+import json
+
+import yaml
+import cerberus
 
 
 class Repo(object):
@@ -197,20 +206,32 @@ class BaseTemplate(object):
 
     def __init__(self, path):
         super().__init__()
+        self._cookiecutter_data = None
         self._log = logging.getLogger(__name__)
         self.path = os.path.abspath(path)
-        if not os.path.isdir(self.path):
-            message = 'File template directory {} not found.'.format(self.path)
-            raise OSError(message)
 
         self._validate_template_dir()
+
+        with open(self.templatekit_yaml_path, 'r') as f:
+            config_data = yaml.safe_load(f)
+        config = TemplateConfig(config_data)
+        # Add default from cookiecutter.json
+        self.config = config.normalize(self)
 
     def _validate_template_dir(self):
         """Run a quick set of checks that this is in fact a template
         repository, with a cookiecutter.json directory, etc.
         """
+        if not os.path.isdir(self.path):
+            message = 'File template directory {} not found.'.format(self.path)
+            raise ValueError(message)
+
         if not os.path.isfile(self.cookiecutter_json_path):
             message = 'cookiecutter.json not found in {}'.format(self.path)
+            raise ValueError(message)
+
+        if not os.path.isfile(self.templatekit_yaml_path):
+            message = 'templatekit.yaml not found in {}'.format(self.path)
             raise ValueError(message)
 
     def __str__(self):
@@ -226,10 +247,25 @@ class BaseTemplate(object):
         return os.path.split(self.path)[-1]
 
     @property
+    def templatekit_yaml_path(self):
+        """Path of the templatekit.yaml file (`str`).
+        """
+        return os.path.join(self.path, 'templatekit.yaml')
+
+    @property
     def cookiecutter_json_path(self):
         """Path of the cookiecutter.json file (`str`).
         """
         return os.path.join(self.path, 'cookiecutter.json')
+
+    @property
+    def cookiecutter(self):
+        """The data from the ``cookiecutter.json`` file.
+        """
+        if self._cookiecutter_data is None:
+            with open(self.cookiecutter_json_path) as f:
+                self._cookiecutter_data = json.load(f)
+        return self._cookiecutter_data
 
 
 class FileTemplate(BaseTemplate):
@@ -275,3 +311,147 @@ class ProjectTemplate(BaseTemplate):
         Raised if ``path`` is a directory that does not contain a recognizable
         template.
     """
+
+
+@functools.lru_cache()
+def get_config_validator():
+    """Get a validator for ``templatekit.yaml`` configuration files.
+
+    This function is cached.
+
+    Returns
+    -------
+    validator : `cerberus.Validator`
+        A Cerberus validator based on the ``configschema.yaml`` schema.
+    """
+    configpath = Path(__file__).parent / 'configschema.yaml'
+    schema = yaml.safe_load(configpath.read_text())
+    validator = cerberus.Validator(schema, purge_unknown=True)
+    return validator
+
+
+class TemplateConfig(collections.abc.Mapping):
+    """Represents the configuration for a template, derived from a
+    templatekit.yaml file.
+
+    Parameters
+    ----------
+    data : `dict`
+        Configuration, parsed from a ``templatekit.yaml`` file.
+
+    Notes
+    -----
+    Access individual configurations on a ``TemplateConfig`` instance like
+    keys in a dictionary.
+    """
+
+    def __init__(self, data):
+        self.data = data
+        self._validator = get_config_validator()
+
+        if self._validator.validate(data) is False:
+            print('Validation errors:')
+            print(json.dumps(self._validator.errors, sort_keys=True, indent=2))
+            print('Data:')
+            print(json.dumps(data, sort_keys=True, indent=2))
+            raise RuntimeError('Configuration syntax error')
+
+        # Apply Cereberus's schema-based normalization
+        self.data = self._validator.normalized(self.data)
+
+    def __getitem__(self, key):
+        return self.data[key]
+
+    def __len__(self):
+        return len(self.data)
+
+    def __iter__(self):
+        for k in self.data:
+            yield k
+
+    def normalize(self, template):
+        """Normalize the template configuration by adding defaults for any
+        missing configurations.
+
+        Parameters
+        ----------
+        template : `BaseTemplate`
+            A template instance.
+
+        Returns
+        -------
+        template_config : `TemplateConfig`
+            A new template configuration instance where all defaults are set.
+        """
+        data = deepcopy(self.data)
+
+        if 'name' not in data:
+            data['name'] = template.name
+
+        if 'group' not in data:
+            data['group'] = 'General'
+
+        if 'dialog_fields' not in data:
+            # Need to get the dialog fields from the cookiecutter.json file
+            data['dialog_fields'] = []
+            for key in template.cookiecutter:
+                if key.startswith('_'):
+                    # skip things like "_extensions"
+                    continue
+                elif isinstance(template.cookiecutter[key], str):
+                    data['dialog_fields'].append({
+                        'key': key,
+                        'label': self._truncate(key, 75),
+                        'component': 'text'
+                    })
+                elif isinstance(template.cookiecutter[key], list):
+                    data['dialog_fields'].append({
+                        'key': key,
+                        'label': self._truncate(key, 75),
+                        'component': 'select'
+                    })
+
+        for field in data['dialog_fields']:
+            if field['component'] == 'select':
+                self._normalize_select_field(field, template)
+            elif field['component'] == 'text':
+                self._normalize_text_field(field, template)
+
+        return TemplateConfig(data)
+
+    def _normalize_select_field(self, field, template):
+        """Normalize a "select" component field.
+
+        - Add options that exist in the cookiecutter.json file if the options
+          aren't explicitly set.
+        """
+        if 'preset_options' in field or 'preset_groups' in field:
+            # The schemas force these to be fully specified in templatekit.yaml
+            return
+        elif 'options' not in field:
+            # Add options from cookiecutter.json
+            field['options'] = []
+            for option_value in template.cookiecutter[field['key']]:
+                # Enforce Slack length limit on the label
+                option_label = self._truncate(option_value, 75)
+                field['options'].append({
+                    'label': option_label,
+                    'value': option_label,  # also needs truncation
+                    'template_value': option_value,
+                })
+
+    def _normalize_text_field(self, field, template):
+        """Normalize text field components.
+
+        - Add placeholder information found in the cookiecutter.json file
+          if an explicit placeholder isn't set.
+        """
+        if 'placeholder' not in field or len(field['placeholder']) == 0:
+            field['placeholder'] = template.cookiecutter[field['key']]
+        return field
+
+    def _truncate(self, text, length):
+        if isinstance(text, str) and len(text) > length:
+            return text[:length - 1] + "…"
+        else:
+            return text

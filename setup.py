@@ -22,13 +22,15 @@ install_requires = [
     'Jinja2>=2.10,<3.0.0',
     'scons>=3.0.1,<3.1.0',
     'click>=6.7,<7.0',
-    'pyperclip>=1.6.0,<1.7.0'
+    'pyperclip>=1.6.0,<1.7.0',
+    'PyYAML>=3.13,<4.0',
+    'Cerberus>=1.2,<2.0'
 ]
 
 # Test dependencies
 tests_require = [
-    'pytest==4.0.2',
-    'pytest-flake8==1.0.2',
+    'pytest==4.2.0',
+    'pytest-flake8==1.0.4',
 ]
 tests_require += install_requires
 
