@@ -71,5 +71,6 @@ setup(
     entry_points={
         'console_scripts': ['templatekit = templatekit.scripts.main:main']
     },
-    use_scm_version=True
+    use_scm_version=True,
+    include_package_data=True
 )
