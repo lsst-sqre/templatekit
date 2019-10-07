@@ -5,7 +5,8 @@ __all__ = ('convert_py_to_cpp_namespace_code',
            'convert_py_namespace_to_cpp_header_def',
            'convert_py_to_cpp_namespace',
            'convert_py_namespace_to_includes_dir',
-           'convert_py_namespace_to_header_filename')
+           'convert_py_namespace_to_header_filename',
+           'escape_yaml_doublequoted')
 
 import os
 from jinja2.ext import Extension
@@ -43,6 +44,8 @@ class TemplatekitExtension(Extension):
       (`convert_py_namespace_to_includes_dir`)
     - ``convert_py_namespace_to_header_filename``
       (`convert_py_namespace_to_header_filename`)
+    - ``escape_yaml_doublequoted``
+      (`escape_yaml_doublequoted`)
     """
 
     def __init__(self, environment):
@@ -53,6 +56,7 @@ class TemplatekitExtension(Extension):
         environment.filters['convert_py_to_cpp_namespace'] = convert_py_to_cpp_namespace  # noqa: E501
         environment.filters['convert_py_namespace_to_includes_dir'] = convert_py_namespace_to_includes_dir  # noqa: E501
         environment.filters['convert_py_namespace_to_header_filename'] = convert_py_namespace_to_header_filename  # noqa: E501
+        environment.filters['escape_yaml_doublequoted'] = escape_yaml_doublequoted  # noqa: E501
 
 
 def convert_py_to_cpp_namespace_code(python_namespace):
@@ -156,3 +160,27 @@ def convert_py_namespace_to_header_filename(python_namespace):
     """
     parts = python_namespace.split('.')
     return parts[-1] + '.h'
+
+
+def escape_yaml_doublequoted(string):
+    r"""Escape the content of a double-quoted YAML string.
+
+    Parameters
+    ----------
+    string : `str`
+        A string.
+
+    Returns
+    -------
+    escaped_string : `str`
+        A string escaped so it can be safely inserted into a double-quoted
+        YAML string.
+
+    Notes
+    -----
+    To escape a double-quoted YAML string:
+
+    - Replace ``\`` with ``\\``.
+    - Replace ``"`` with ``"\``.
+    """
+    return string.replace('\\', '\\\\').replace('"', '\\"')
