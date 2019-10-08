@@ -85,7 +85,15 @@ default_role = 'py:obj'
 
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3/', None),
+    'cookiecutter': ('https://cookiecutter.readthedocs.io/en/latest/', None),
 }
+
+rst_epilog = """
+
+.. _Cookiecutter: https://cookiecutter.readthedocs.io/en/latest/
+.. _Jinja: http://jinja.pocoo.org
+.. _lsst/templates: https://github.com/lsst/templates
+"""
 
 # -- Options for linkcheck builder ----------------------------------------
 

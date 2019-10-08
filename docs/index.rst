@@ -22,6 +22,14 @@ User guide
 
    cli-reference
 
+Template development guide
+==========================
+
+.. toctree::
+   :maxdepth: 2
+
+   template-guide/index
+
 Project information
 ===================
 
@@ -29,7 +37,3 @@ Project information
    :maxdepth: 1
 
    changelog
-
-.. _Cookiecutter: https://cookiecutter.readthedocs.io/en/latest/
-.. _Jinja: http://jinja.pocoo.org
-.. _lsst/templates: https://github.com/lsst/templates
