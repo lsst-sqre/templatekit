@@ -37,3 +37,4 @@ Project information
    :maxdepth: 1
 
    changelog
+   development-guide
