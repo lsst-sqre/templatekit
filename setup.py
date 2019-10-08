@@ -29,7 +29,7 @@ install_requires = [
 
 # Test dependencies
 tests_require = [
-    'pytest==4.2.0',
+    'pytest==5.2.1',
     'pytest-flake8==1.0.4',
 ]
 tests_require += install_requires
@@ -48,7 +48,7 @@ extras_require = {
 
 # Setup-time dependencies
 setup_requires = [
-    'pytest-runner>=4.2.0,<5.0.0',
+    'pytest-runner>=5.0.0',
     'setuptools_scm',
 ]
 
