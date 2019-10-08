@@ -8,7 +8,7 @@ LSST's https://github.com/lsst/templates is the primary repository that Template
 Installation
 ============
 
-Templatekit is available from PyPI:
+Templatekit is available from `PyPI <https://pypi.org/project/templatekit/>`_:
 
 .. code-block:: sh
 
