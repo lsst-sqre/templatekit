@@ -8,7 +8,8 @@ from templatekit.jinjaext import (
     convert_py_namespace_to_cpp_header_def,
     convert_py_to_cpp_namespace,
     convert_py_namespace_to_includes_dir,
-    convert_py_namespace_to_header_filename)
+    convert_py_namespace_to_header_filename,
+    escape_yaml_doublequoted)
 
 
 def test_cpp_namespace_code():
@@ -55,3 +56,13 @@ def test_includes_dir(python_namespace, expected):
 ])
 def test_header_name(python_namespace, expected):
     assert expected == convert_py_namespace_to_header_filename(python_namespace)  # noqa E501
+
+
+@pytest.mark.parametrize('string,expected', [
+    ('hello world', 'hello world'),
+    ('hello "world"', 'hello \\"world\\"'),
+    ("hello 'world'", "hello 'world'"),
+    ("hello \\ world", "hello \\\\ world"),
+])
+def test_escape_yaml_doublequoted(string, expected):
+    assert expected == escape_yaml_doublequoted(string)

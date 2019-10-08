@@ -23,13 +23,13 @@ install_requires = [
     'scons>=3.0.1,<3.1.0',
     'click>=6.7,<7.0',
     'pyperclip>=1.6.0,<1.7.0',
-    'PyYAML>=3.13,<4.0',
+    'PyYAML>=5.1',
     'Cerberus>=1.2,<2.0'
 ]
 
 # Test dependencies
 tests_require = [
-    'pytest==4.2.0',
+    'pytest==5.2.1',
     'pytest-flake8==1.0.4',
 ]
 tests_require += install_requires
@@ -48,7 +48,7 @@ extras_require = {
 
 # Setup-time dependencies
 setup_requires = [
-    'pytest-runner>=4.2.0,<5.0.0',
+    'pytest-runner>=5.0.0',
     'setuptools_scm',
 ]
 

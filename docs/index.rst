@@ -8,7 +8,7 @@ LSST's https://github.com/lsst/templates is the primary repository that Template
 Installation
 ============
 
-Templatekit is available from PyPI:
+Templatekit is available from `PyPI <https://pypi.org/project/templatekit/>`_:
 
 .. code-block:: sh
 
@@ -22,6 +22,14 @@ User guide
 
    cli-reference
 
+Template development guide
+==========================
+
+.. toctree::
+   :maxdepth: 2
+
+   template-guide/index
+
 Project information
 ===================
 
@@ -29,7 +37,4 @@ Project information
    :maxdepth: 1
 
    changelog
-
-.. _Cookiecutter: https://cookiecutter.readthedocs.io/en/latest/
-.. _Jinja: http://jinja.pocoo.org
-.. _lsst/templates: https://github.com/lsst/templates
+   development-guide

@@ -39,7 +39,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Templatekit'
-copyright = '2018 Association of Universities for Research in Astronomy'
+copyright = '2018-2019 Association of Universities for Research in Astronomy'
 author = 'LSST Data Management'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -85,7 +85,15 @@ default_role = 'py:obj'
 
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3/', None),
+    'cookiecutter': ('https://cookiecutter.readthedocs.io/en/latest/', None),
 }
+
+rst_epilog = """
+
+.. _Cookiecutter: https://cookiecutter.readthedocs.io/en/latest/
+.. _Jinja: http://jinja.pocoo.org
+.. _lsst/templates: https://github.com/lsst/templates
+"""
 
 # -- Options for linkcheck builder ----------------------------------------
 
