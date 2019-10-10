@@ -12,6 +12,7 @@ import itertools
 import logging
 from pathlib import Path
 import json
+import subprocess
 
 import yaml
 import cerberus
@@ -185,6 +186,20 @@ class Repo(object):
         fs_items.sort()
         fs_items = [os.path.join(dirname, item) for item in fs_items]
         return [fs_item for fs_item in fs_items if os.path.isdir(fs_item)]
+
+    def build(self):
+        """Run a scons build of the template repository.
+
+        This method runs the ``scons`` command, and thus regenerates examples
+        for each template.
+
+        Returns
+        -------
+        result : `subprocess.CompletedProcess`
+            The result of the ``scons`` execution. See
+            `subprocess.CompletedProcess` for details.
+        """
+        return subprocess.run(['scons'], shell=True, cwd=self.root)
 
 
 class BaseTemplate(object):
