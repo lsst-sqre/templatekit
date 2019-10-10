@@ -24,7 +24,8 @@ install_requires = [
     'click>=6.7,<7.0',
     'pyperclip>=1.6.0,<1.7.0',
     'PyYAML>=5.1',
-    'Cerberus>=1.2,<2.0'
+    'Cerberus>=1.2,<2.0',
+    'GitPython>=3.0.0',
 ]
 
 # Test dependencies
