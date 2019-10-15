@@ -2,6 +2,9 @@
 Development guide
 #################
 
+This page describes how to develop Templatekit, the Python package.
+For information on developing templates *in* a template repository, see the :doc:`template-guide/index`.
+
 Building and testing
 ====================
 
@@ -56,6 +59,10 @@ Starting from a development branch:
       git tag -s X.Y.Z -m "X.Y.Z"
       git push --tags
 
-Travis CI will create a new release on PyPI.
+   Travis CI will create a new release on PyPI.
+5. Update projects that depend on Templatekit:
+
+   - https://github.com/lsst/templates
+   - https://github.com/lsst-sqre/templatebot
 
 .. _virtual environment: https://docs.python.org/3/library/venv.html
