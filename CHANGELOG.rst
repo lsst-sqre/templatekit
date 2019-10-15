@@ -2,8 +2,8 @@
 Change log
 ##########
 
-Unreleased
-==========
+0.4.0 (2019-10-15)
+==================
 
 - Added a new ``templatekit check`` command.
   This command helps both developers and CI scripts ensure that the template repository is well-structured and that all examples are up-to-date.
