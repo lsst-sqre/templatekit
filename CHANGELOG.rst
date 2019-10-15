@@ -2,6 +2,15 @@
 Change log
 ##########
 
+Unreleased
+==========
+
+- Added a new ``templatekit check`` command.
+  This command helps both developers and CI scripts ensure that the template repository is well-structured and that all examples are up-to-date.
+  The ``templatekit check`` command runs ``scons`` to regenerate examples, and then checks the Git state to ensure that there are no untracked or modified files, which might indicate that there are uncommitted changes to examples.
+- Internally, the ``templatekit.Repo`` class exposes a ``git.Repo`` instance from GitPython_.
+  See ``templatekit.Repo.gitrepo``, ``templatekit.Repo.is_git_dirty``, and ``templatekit.Repo.untracked_files``.
+
 0.3.0 (2019-10-08)
 ==================
 
@@ -40,3 +49,4 @@ Change log
 (`DM-16940 <https://jira.lsstcorp.org/browse/DM-16940>`__)
 
 .. _Templatebot: https://github.com/lsst-sqre/templatebot
+.. _GitPython: https://gitpython.readthedocs.io/en/stable/index.html
