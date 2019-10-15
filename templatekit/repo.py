@@ -14,6 +14,7 @@ from pathlib import Path
 import json
 import subprocess
 
+import git
 import yaml
 import cerberus
 
@@ -31,6 +32,7 @@ class Repo(object):
     def __init__(self, root):
         super().__init__()
         self._log = logging.getLogger(__name__)
+        self._gitrepo = None
         self.root = root
 
     @classmethod
@@ -200,6 +202,47 @@ class Repo(object):
             `subprocess.CompletedProcess` for details.
         """
         return subprocess.run(['scons'], shell=True, cwd=self.root)
+
+    @property
+    def gitrepo(self):
+        """The template repository's Git repository (`git.Repo`).
+        """
+        if self._gitrepo is None:
+            self._gitrepo = git.repo.base.Repo(path=self.root)
+        return self._gitrepo
+
+    def is_git_dirty(self):
+        """Test if the Git repository has uncommitted state (including
+        untracked files.
+
+        Returns
+        -------
+        dirty : `bool`
+            `True` if the Git repository is "dirty;" `False` otherwise.
+        """
+        return self.gitrepo.is_dirty(
+            index=True,
+            working_tree=True,
+            untracked_files=True,
+            submodules=True)
+
+    @property
+    def untracked_files(self):
+        """The list of files not tracked by the Git repository (and not
+        ignored).
+        """
+        return self.gitrepo.untracked_files
+
+    def get_uncommitted_files(self):
+        """Get a DiffIndex with all changes of the template repository
+        compared to the committed state.
+
+        Returns
+        -------
+        diffindex : `git.diff.DiffIndex`
+            A `~DiffIndex` of all changes that are not committed.
+        """
+        return self.gitrepo.head.commit.diff(None)
 
 
 class BaseTemplate(object):
