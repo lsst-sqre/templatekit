@@ -8,6 +8,7 @@ import click
 from ..repo import Repo
 from .listtemplates import list_templates
 from .make import make
+from .check import check
 
 
 # Add -h as a help shortcut option
@@ -55,3 +56,4 @@ def help(ctx, topic, **kw):
 # Add subcommands from other modules
 main.add_command(list_templates, name='list')
 main.add_command(make)
+main.add_command(check)
