@@ -37,8 +37,8 @@ tests_require += install_requires
 
 # Sphinx documentation dependencies
 docs_require = [
-    'documenteer[pipelines]>=0.4.0,<0.5.0',
-    'sphinx-click>=1.2.0,<1.3.0',
+    'documenteer[pipelines]>=0.5.0,<0.6.0',
+    'sphinx-click',
 ]
 
 # Optional dependencies (like for dev)
