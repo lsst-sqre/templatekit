@@ -2,6 +2,12 @@
 Change log
 ##########
 
+0.4.1 (2020-02-26)
+==================
+
+- The click dependency is no longer pinned.
+  This fixes compatibility with cookiecutter 1.7, which requires click 7.
+
 0.4.0 (2019-10-15)
 ==================
 
