@@ -21,7 +21,7 @@ install_requires = [
     'cookiecutter>=1.6.0,<2.0.0',
     'Jinja2>=2.10,<3.0.0',
     'scons>=3.0.1,<3.1.0',
-    'click>=6.7,<7.0',
+    'click',
     'pyperclip>=1.6.0,<1.7.0',
     'PyYAML>=5.1',
     'Cerberus>=1.2,<2.0',
