@@ -18,20 +18,20 @@ readme = Path(__file__).parent / 'README.rst'
 
 # Core dependencies
 install_requires = [
-    'cookiecutter>=1.6.0,<2.0.0',
-    'Jinja2>=2.10,<3.0.0',
-    'scons>=3.0.1,<3.1.0',
+    'cookiecutter>=1.6.0',
+    'Jinja2>=2.10',
+    'scons>=3.0.1',
     'click',
-    'pyperclip>=1.6.0,<1.7.0',
+    'pyperclip>=1.6.0',
     'PyYAML>=5.1',
-    'Cerberus>=1.2,<2.0',
+    'Cerberus>=1.2',
     'GitPython>=3.0.0',
 ]
 
 # Test dependencies
 tests_require = [
-    'pytest==5.2.1',
-    'pytest-flake8==1.0.4',
+    'pytest==7.0.1',
+    'pytest-flake8==1.1.0',
 ]
 tests_require += install_requires
 
