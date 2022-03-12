@@ -16,13 +16,16 @@ given the template defaults. Users will use cookiecutter directly to generate
 new projects from a template.
 """
 
-__all__ = ('file_template_builder', 'cookiecutter_project_builder',
-           'line_format_builder')
+__all__ = (
+    "file_template_builder",
+    "cookiecutter_project_builder",
+    "line_format_builder",
+)
 
 import os
 
-from cookiecutter.main import cookiecutter
 from cookiecutter.find import find_template
+from cookiecutter.main import cookiecutter
 from SCons.Script import Builder
 
 from .filerender import render_and_write_file_template
@@ -45,18 +48,19 @@ def build_file_template(target, source, env):
     source_path = str(source[0])
 
     construction_vars = env.Dictionary()
-    if 'cookiecutter_context' in construction_vars:
-        context_overrides = construction_vars['cookiecutter_context']
+    if "cookiecutter_context" in construction_vars:
+        context_overrides = construction_vars["cookiecutter_context"]
     else:
         context_overrides = None
 
-    render_and_write_file_template(source_path, target_path,
-                                   extra_context=context_overrides)
+    render_and_write_file_template(
+        source_path, target_path, extra_context=context_overrides
+    )
 
 
-file_template_builder = Builder(action=build_file_template,
-                                suffix='',
-                                src_suffix='.jinja')
+file_template_builder = Builder(
+    action=build_file_template, suffix="", src_suffix=".jinja"
+)
 """Scons builder for rendering a single-file template examples.
 """
 
@@ -85,8 +89,8 @@ def build_project_template(target, source, env):
     template_dir = os.path.dirname(cookiecutter_json_source)
 
     construction_vars = env.Dictionary()
-    if 'cookiecutter_context' in construction_vars:
-        context_overrides = construction_vars['cookiecutter_context']
+    if "cookiecutter_context" in construction_vars:
+        context_overrides = construction_vars["cookiecutter_context"]
     else:
         context_overrides = None
 
@@ -95,7 +99,8 @@ def build_project_template(target, source, env):
         output_dir=template_dir,
         overwrite_if_exists=True,
         no_input=True,
-        extra_context=context_overrides)
+        extra_context=context_overrides,
+    )
 
 
 def emit_cookiecutter_sources(target, source, env):
@@ -107,16 +112,18 @@ def emit_cookiecutter_sources(target, source, env):
     source list.
     """
     # Get the template directory (i.e., "{{ cookiecutter.project_name }}/")
-    template_dir = find_template('.')
+    template_dir = find_template(".")
     # Get all the template files and add them to the sources
     for (_base_path, _dir_names, _file_names) in os.walk(template_dir):
-        source.extend([os.path.join(_base_path, file_name)
-                       for file_name in _file_names])
+        source.extend(
+            [os.path.join(_base_path, file_name) for file_name in _file_names]
+        )
     return target, source
 
 
-cookiecutter_project_builder = Builder(action=build_project_template,
-                                       emitter=emit_cookiecutter_sources)
+cookiecutter_project_builder = Builder(
+    action=build_project_template, emitter=emit_cookiecutter_sources
+)
 """Scons builder for rendering a cookiecutter project template.
 
 The action is `build_project_template` and the emitter is
@@ -125,8 +132,9 @@ cookiecutter project.
 """
 
 
-def format_content(target, source, env, line_format=None,
-                   header=None, footer=None):
+def format_content(
+    target, source, env, line_format=None, header=None, footer=None
+):
     """Scons builder action for rendering a Python comment from a plain
     text file.
 
@@ -143,25 +151,26 @@ def format_content(target, source, env, line_format=None,
     source_path = str(source[0])
 
     try:
-        line_format = env['line_format']
+        line_format = env["line_format"]
     except KeyError:
-        line_format = '{}'
+        line_format = "{}"
 
     try:
-        header = env['header']
+        header = env["header"]
     except KeyError:
         header = None
 
     try:
-        footer = env['footer']
+        footer = env["footer"]
     except KeyError:
         footer = None
 
     with open(source_path) as fh:
         content = fh.read()
-    formatted_content = reformat_content_lines(content, line_format,
-                                               header=header, footer=footer)
-    with open(target_path, 'w') as fh:
+    formatted_content = reformat_content_lines(
+        content, line_format, header=header, footer=footer
+    )
+    with open(target_path, "w") as fh:
         fh.write(formatted_content)
 
 

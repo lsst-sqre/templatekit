@@ -1,14 +1,17 @@
 """Custom Jinja2 filters and tags.
 """
 
-__all__ = ('convert_py_to_cpp_namespace_code',
-           'convert_py_namespace_to_cpp_header_def',
-           'convert_py_to_cpp_namespace',
-           'convert_py_namespace_to_includes_dir',
-           'convert_py_namespace_to_header_filename',
-           'escape_yaml_doublequoted')
+__all__ = (
+    "convert_py_to_cpp_namespace_code",
+    "convert_py_namespace_to_cpp_header_def",
+    "convert_py_to_cpp_namespace",
+    "convert_py_namespace_to_includes_dir",
+    "convert_py_namespace_to_header_filename",
+    "escape_yaml_doublequoted",
+)
 
 import os
+
 from jinja2.ext import Extension
 
 
@@ -51,12 +54,24 @@ class TemplatekitExtension(Extension):
     def __init__(self, environment):
         super().__init__(environment)
 
-        environment.filters['convert_py_to_cpp_namespace_code'] = convert_py_to_cpp_namespace_code  # noqa: E501
-        environment.filters['convert_py_namespace_to_cpp_header_def'] = convert_py_namespace_to_cpp_header_def  # noqa: E501
-        environment.filters['convert_py_to_cpp_namespace'] = convert_py_to_cpp_namespace  # noqa: E501
-        environment.filters['convert_py_namespace_to_includes_dir'] = convert_py_namespace_to_includes_dir  # noqa: E501
-        environment.filters['convert_py_namespace_to_header_filename'] = convert_py_namespace_to_header_filename  # noqa: E501
-        environment.filters['escape_yaml_doublequoted'] = escape_yaml_doublequoted  # noqa: E501
+        environment.filters[
+            "convert_py_to_cpp_namespace_code"
+        ] = convert_py_to_cpp_namespace_code  # noqa: E501
+        environment.filters[
+            "convert_py_namespace_to_cpp_header_def"
+        ] = convert_py_namespace_to_cpp_header_def  # noqa: E501
+        environment.filters[
+            "convert_py_to_cpp_namespace"
+        ] = convert_py_to_cpp_namespace  # noqa: E501
+        environment.filters[
+            "convert_py_namespace_to_includes_dir"
+        ] = convert_py_namespace_to_includes_dir  # noqa: E501
+        environment.filters[
+            "convert_py_namespace_to_header_filename"
+        ] = convert_py_namespace_to_header_filename  # noqa: E501
+        environment.filters[
+            "escape_yaml_doublequoted"
+        ] = escape_yaml_doublequoted  # noqa: E501
 
 
 def convert_py_to_cpp_namespace_code(python_namespace):
@@ -85,11 +100,11 @@ def convert_py_to_cpp_namespace_code(python_namespace):
 
         {{ 'lsst.example' | convert_py_to_cpp_namespace_code }}
     """
-    name = python_namespace.replace('.', '::')
-    namespace_parts = python_namespace.split('.')
-    opening = 'namespace ' + ' { '.join(namespace_parts) + ' {\n'
-    closing = '}' * len(namespace_parts) + ' // {}'.format(name)
-    return '\n'.join((opening, closing))
+    name = python_namespace.replace(".", "::")
+    namespace_parts = python_namespace.split(".")
+    opening = "namespace " + " { ".join(namespace_parts) + " {\n"
+    closing = "}" * len(namespace_parts) + " // {}".format(name)
+    return "\n".join((opening, closing))
 
 
 def convert_py_namespace_to_cpp_header_def(python_namespace):
@@ -106,7 +121,7 @@ def convert_py_namespace_to_cpp_header_def(python_namespace):
     cpp_header_def : `str`
         C++ header def, such as '`'LSST_EXAMPLE_H'``.
     """
-    return python_namespace.upper().replace('.', '_') + '_H'
+    return python_namespace.upper().replace(".", "_") + "_H"
 
 
 def convert_py_to_cpp_namespace(python_namespace):
@@ -123,7 +138,7 @@ def convert_py_to_cpp_namespace(python_namespace):
     cpp_namespace : `str`
         A C++ namespace. For example: ``'lsst::example'``.
     """
-    return python_namespace.replace('.', '::')
+    return python_namespace.replace(".", "::")
 
 
 def convert_py_namespace_to_includes_dir(python_namespace):
@@ -140,7 +155,7 @@ def convert_py_namespace_to_includes_dir(python_namespace):
     includes_dir : `str`
         The includes directory.
     """
-    parts = python_namespace.split('.')
+    parts = python_namespace.split(".")
     return os.path.join(*parts[:-1])
 
 
@@ -158,8 +173,8 @@ def convert_py_namespace_to_header_filename(python_namespace):
     header_filename : `str`
         Filename of the root header file.
     """
-    parts = python_namespace.split('.')
-    return parts[-1] + '.h'
+    parts = python_namespace.split(".")
+    return parts[-1] + ".h"
 
 
 def escape_yaml_doublequoted(string):
@@ -183,4 +198,4 @@ def escape_yaml_doublequoted(string):
     - Replace ``\`` with ``\\``.
     - Replace ``"`` with ``"\``.
     """
-    return string.replace('\\', '\\\\').replace('"', '\\"')
+    return string.replace("\\", "\\\\").replace('"', '\\"')

@@ -1,7 +1,7 @@
 """Generic utilities for working with text content.
 """
 
-__all__ = ('reformat_content_lines',)
+__all__ = ("reformat_content_lines",)
 
 
 def reformat_content_lines(content, fmt, header=None, footer=None):
@@ -23,7 +23,7 @@ def reformat_content_lines(content, fmt, header=None, footer=None):
     """
     # Take any final newline off the end of the content so there isn't an
     # empty final line
-    content_lines = content.rstrip().split('\n')
+    content_lines = content.rstrip().split("\n")
     output_lines = []
 
     if header is not None:
@@ -36,4 +36,4 @@ def reformat_content_lines(content, fmt, header=None, footer=None):
         output_lines.append(footer)
 
     # Always include a final newline
-    return '\n'.join(output_lines) + '\n'
+    return "\n".join(output_lines) + "\n"
