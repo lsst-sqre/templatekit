@@ -1,0 +1,118 @@
+name: Python CI
+
+"on":
+  push:
+    branches-ignore:
+      # These should always correspond to pull requests, so ignore them for
+      # the push trigger and let them be triggered by the pull_request
+      # trigger, avoiding running the workflow twice.  This is a minor
+      # optimization so there's no need to ensure this is comprehensive.
+      - "dependabot/**"
+      - "renovate/**"
+      - "tickets/**"
+      - "u/**"
+    tags:
+      - "*"
+  pull_request: {}
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python:
+          - "3.8"
+          - "3.9"
+          - "3.10"
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Run pre-commit
+        uses: pre-commit/action@v2.0.3
+
+      - name: Install tox
+        run: pip install tox tox-docker
+
+      - name: Cache tox environments
+        id: cache-tox
+        uses: actions/cache@v2
+        with:
+          path: .tox
+          # setup.cfg and pyproject.toml have versioning info that would
+          # impact the tox environment.
+          key: tox-${{ matrix.python }}-${{ hashFiles('pyproject.toml', 'setup.cfg') }}
+
+      - name: Run tox
+        run: tox -e py
+
+  docs:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+
+      - name: Install Graphviz
+        run: sudo apt-get install graphviz
+
+      - name: Install tox and LTD Conveyor
+        run: pip install tox ltd-conveyor
+
+      - name: Run tox
+        run: tox -e docs
+
+      # Only attempt documentation uploads for tagged releases and pull
+      # requests from ticket branches in the same repository.  This avoids
+      # version clutter in the docs and failures when a PR doesn't have access
+      # to secrets.
+      - name: Upload to LSST the Docs
+        env:
+          LTD_USERNAME: ${{ secrets.LTD_USERNAME }}
+          LTD_PASSWORD: ${{ secrets.LTD_PASSWORD }}
+        run: ltd upload --product templatekit --gh --dir docs/_build/html
+        if: >
+          github.event_name != 'pull_request'
+          || startsWith(github.head_ref, 'tickets/')
+
+  pypi:
+
+    runs-on: ubuntu-latest
+    needs: [test, docs]
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # full history for setuptools_scm
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade setuptools wheel
+
+      - name: Build
+        run: python setup.py sdist bdist_wheel
+
+      - name: Upload
+        uses: pypa/gh-action-pypi-publish@v1.5.0
+        env:
+          user: "__token__"
+          password: ${{ secrets.PYPI_SQRE_ADMIN }}
