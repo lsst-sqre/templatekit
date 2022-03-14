@@ -51,7 +51,7 @@ jobs:
           key: tox-${{ matrix.python }}-${{ hashFiles('pyproject.toml', 'setup.cfg') }}
 
       - name: Run tox
-        run: tox -e py
+        run: tox -e py,typing
 
   docs:
 
