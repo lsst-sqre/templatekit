@@ -116,9 +116,9 @@ dialog_fields:
             # The cookiecutter.json keys and values this preset corresponds to.
             presets:
               type: "dict"
-              keyschema:
+              keysrules:
                 type: "string"
-              valueschema:
+              valuesrules:
                 type: "string"
       # Grouped preset options menu
       preset_groups:
@@ -140,7 +140,7 @@ dialog_fields:
                     type: "string"
                   presets:
                     type: "dict"
-                    keyschema:
+                    keysrules:
                       type: "string"
-                    valueschema:
+                    valuesrules:
                       type: "string"
