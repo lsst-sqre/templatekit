@@ -7,3 +7,5 @@ except DistributionNotFound:
     pass
 
 from .jinjaext import TemplatekitExtension
+
+__all__ = ["TemplatekitExtension"]
