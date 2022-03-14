@@ -4,7 +4,7 @@
 from templatekit.textutils import reformat_content_lines
 
 
-def test_reformat_content_lines():
+def test_reformat_content_lines() -> None:
     """Test reformatting text (a Python comment block)."""
     sample = "Line 1\n" "Line 2\n"
     expected = "# Line 1\n" "# Line 2\n"
@@ -12,7 +12,7 @@ def test_reformat_content_lines():
     assert result == expected
 
 
-def test_reformat_content_lines_no_final_newline():
+def test_reformat_content_lines_no_final_newline() -> None:
     """Same as `test_reformat_content_lines` except the original content
     lacks a final newline.
     """
@@ -22,7 +22,7 @@ def test_reformat_content_lines_no_final_newline():
     assert result == expected
 
 
-def test_reformat_content_lines_header_footer():
+def test_reformat_content_lines_header_footer() -> None:
     """Test reformatting text and including a header and footer (like a C++
     comment block).
     """
@@ -32,7 +32,7 @@ def test_reformat_content_lines_header_footer():
     assert result == expected
 
 
-def test_reformat_content_lines_header_footer_no_final_newline():
+def test_reformat_content_lines_header_footer_no_final_newline() -> None:
     """Same as `test_reformat_content_lines_header_footer` except the original
     content lacks a final newline.
     """

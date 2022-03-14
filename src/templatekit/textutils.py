@@ -3,8 +3,15 @@
 
 __all__ = ("reformat_content_lines",)
 
+from typing import Optional
 
-def reformat_content_lines(content, fmt, header=None, footer=None):
+
+def reformat_content_lines(
+    content: str,
+    fmt: str,
+    header: Optional[str] = None,
+    footer: Optional[str] = None,
+) -> str:
     """Apply a (new-style) Python format expression to each line of a string
     content block.
 

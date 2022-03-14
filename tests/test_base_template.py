@@ -8,7 +8,7 @@ import pytest
 from templatekit.repo import BaseTemplate
 
 
-def test_validation(templates_repo):
+def test_validation(templates_repo: str) -> None:
     """Test basic BaseTemplate instantiation/validation checks.
 
     Uses the actual templates repository data.
@@ -39,7 +39,7 @@ def test_validation(templates_repo):
         ("project_templates/example_project", "example_project"),
     ],
 )
-def test_name(templates_repo, path, expected):
+def test_name(templates_repo: str, path: str, expected: str) -> None:
     """Test BaseTemplate.name."""
     full_path = os.path.join(templates_repo, path)
     template = BaseTemplate(full_path)
@@ -53,7 +53,7 @@ def test_name(templates_repo, path, expected):
         "project_templates/example_project",
     ],
 )
-def test_cookiecutter_json_path(templates_repo, path):
+def test_cookiecutter_json_path(templates_repo: str, path: str) -> None:
     """Test BaseTemplate.cookiecutter_json_path."""
     full_path = os.path.join(templates_repo, path)
     template = BaseTemplate(full_path)

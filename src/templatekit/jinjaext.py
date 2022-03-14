@@ -12,6 +12,7 @@ __all__ = (
 
 import os
 
+import jinja2
 from jinja2.ext import Extension
 
 
@@ -51,30 +52,30 @@ class TemplatekitExtension(Extension):
       (`escape_yaml_doublequoted`)
     """
 
-    def __init__(self, environment):
+    def __init__(self, environment: jinja2.Environment):
         super().__init__(environment)
 
         environment.filters[
             "convert_py_to_cpp_namespace_code"
-        ] = convert_py_to_cpp_namespace_code  # noqa: E501
+        ] = convert_py_to_cpp_namespace_code
         environment.filters[
             "convert_py_namespace_to_cpp_header_def"
-        ] = convert_py_namespace_to_cpp_header_def  # noqa: E501
+        ] = convert_py_namespace_to_cpp_header_def
         environment.filters[
             "convert_py_to_cpp_namespace"
-        ] = convert_py_to_cpp_namespace  # noqa: E501
+        ] = convert_py_to_cpp_namespace
         environment.filters[
             "convert_py_namespace_to_includes_dir"
-        ] = convert_py_namespace_to_includes_dir  # noqa: E501
+        ] = convert_py_namespace_to_includes_dir
         environment.filters[
             "convert_py_namespace_to_header_filename"
-        ] = convert_py_namespace_to_header_filename  # noqa: E501
+        ] = convert_py_namespace_to_header_filename
         environment.filters[
             "escape_yaml_doublequoted"
-        ] = escape_yaml_doublequoted  # noqa: E501
+        ] = escape_yaml_doublequoted
 
 
-def convert_py_to_cpp_namespace_code(python_namespace):
+def convert_py_to_cpp_namespace_code(python_namespace: str) -> str:
     """Convert a Python namespace to C++ namespace code.
 
     Parameters
@@ -107,7 +108,7 @@ def convert_py_to_cpp_namespace_code(python_namespace):
     return "\n".join((opening, closing))
 
 
-def convert_py_namespace_to_cpp_header_def(python_namespace):
+def convert_py_namespace_to_cpp_header_def(python_namespace: str) -> str:
     """Convert a Python namespace into a C++ header def token.
 
     Parameters
@@ -124,7 +125,7 @@ def convert_py_namespace_to_cpp_header_def(python_namespace):
     return python_namespace.upper().replace(".", "_") + "_H"
 
 
-def convert_py_to_cpp_namespace(python_namespace):
+def convert_py_to_cpp_namespace(python_namespace: str) -> str:
     """Convert a Python namespace name to a C++ namespace.
 
     Parameters
@@ -141,7 +142,7 @@ def convert_py_to_cpp_namespace(python_namespace):
     return python_namespace.replace(".", "::")
 
 
-def convert_py_namespace_to_includes_dir(python_namespace):
+def convert_py_namespace_to_includes_dir(python_namespace: str) -> str:
     """Convert a Python namespace into a C++ header def token.
 
     Parameters
@@ -159,7 +160,7 @@ def convert_py_namespace_to_includes_dir(python_namespace):
     return os.path.join(*parts[:-1])
 
 
-def convert_py_namespace_to_header_filename(python_namespace):
+def convert_py_namespace_to_header_filename(python_namespace: str) -> str:
     """Convert a Python namespace to the name of the root C++ header file.
 
     Parameters
@@ -177,7 +178,7 @@ def convert_py_namespace_to_header_filename(python_namespace):
     return parts[-1] + ".h"
 
 
-def escape_yaml_doublequoted(string):
+def escape_yaml_doublequoted(string: str) -> str:
     r"""Escape the content of a double-quoted YAML string.
 
     Parameters

@@ -3,6 +3,8 @@
 
 __all__ = ("main",)
 
+from typing import Optional
+
 import click
 
 from ..repo import Repo
@@ -28,7 +30,7 @@ CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
     "current working directory.",
 )
 @click.pass_context
-def main(ctx, template_repo):
+def main(ctx: click.Context, template_repo: str) -> None:
     """templatekit is a CLI for lsst/templates, LSST's project template
     repository.
 
@@ -48,12 +50,18 @@ def main(ctx, template_repo):
 @main.command()
 @click.argument("topic", default=None, required=False, nargs=1)
 @click.pass_context
-def help(ctx, topic, **kw):
+def help(ctx: click.Context, topic: Optional[str]) -> None:
     """Show help for any command."""
-    if topic is None:
-        click.echo(ctx.parent.get_help())
+    # The help command implementation is taken from
+    # https://www.burgundywall.com/post/having-click-help-subcommand
+    if topic:
+        if topic in main.commands:
+            click.echo(main.commands[topic].get_help(ctx))
+        else:
+            raise click.UsageError(f"Unknown help topic {topic}", ctx)
     else:
-        click.echo(main.commands[topic].get_help(ctx))
+        assert ctx.parent
+        click.echo(ctx.parent.get_help())
 
 
 # Add subcommands from other modules

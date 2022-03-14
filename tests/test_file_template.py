@@ -8,14 +8,14 @@ import os
 from templatekit.repo import FileTemplate
 
 
-def _make_repo_path(repo_rel_path):
+def _make_repo_path(repo_rel_path: str) -> str:
     """Make an absolute path to a template directory given a
     repo-relative path.
     """
     return os.path.join(os.path.dirname(__file__), "..", repo_rel_path)
 
 
-def test_source_path(templates_repo):
+def test_source_path(templates_repo: str) -> None:
     template_path = os.path.join(templates_repo, "file_templates/copyright")
     template = FileTemplate(template_path)
     source_path = template.source_path

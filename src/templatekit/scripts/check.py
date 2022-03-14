@@ -5,13 +5,16 @@ operation.
 __all__ = ("check",)
 
 import sys
+from typing import Dict
 
 import click
+
+from ..repo import Repo
 
 
 @click.command(short_help="Check the template repository")
 @click.pass_obj
-def check(state):
+def check(state: Dict[str, Repo]) -> None:
     """Check the template repository for valid structure and operation.
 
     The following checks are performed:
@@ -54,7 +57,7 @@ def check(state):
         print("✅ Passed!")
 
 
-def _test_git_state(repo):
+def _test_git_state(repo: Repo) -> int:
     """Test if the Git repository of the template repository is clean.
     (no modified files and no untracked files).
     """
@@ -67,7 +70,7 @@ def _test_git_state(repo):
     return error_count
 
 
-def _test_untracked_files(repo):
+def _test_untracked_files(repo: Repo) -> int:
     untracked_paths = repo.untracked_files
     error_count = 0
     if len(untracked_paths) > 0:
@@ -78,14 +81,16 @@ def _test_untracked_files(repo):
     return error_count
 
 
-def _test_uncommitted_changes(repo):
+def _test_uncommitted_changes(repo: Repo) -> int:
     error_count = 0
     # Get all uncommitted changes because we don't have a count of them
     # otherwise
     uncommitted_changes = []
     diffindex = repo.get_uncommitted_files()
     for changetype in diffindex.change_type:
-        for change in diffindex.iter_change_type(changetype):
+        for change in diffindex.iter_change_type(
+            changetype  # type: ignore[arg-type]  # GitPython typing bug
+        ):
             # For deleted files, we want to use the original ("a") path.
             # Otherwise, we tend to want to show the user the new ("b") path
             if changetype in ("D",):

@@ -23,16 +23,19 @@ __all__ = (
 )
 
 import os
+from typing import List, Tuple
 
 from cookiecutter.find import find_template
 from cookiecutter.main import cookiecutter
-from SCons.Script import Builder
+from SCons.Script import Builder, Environment, Node
 
 from .filerender import render_and_write_file_template
 from .textutils import reformat_content_lines
 
 
-def build_file_template(target, source, env):
+def build_file_template(
+    target: List[Node], source: List[Node], env: Environment
+) -> None:
     """Scons builder action for rendering a single-file template.
 
     Parameters
@@ -65,7 +68,9 @@ file_template_builder = Builder(
 """
 
 
-def build_project_template(target, source, env):
+def build_project_template(
+    target: List[Node], source: List[Node], env: Environment
+) -> None:
     """Scons builder action for rendering a cookiecutter project template.
 
     Parameters
@@ -103,7 +108,9 @@ def build_project_template(target, source, env):
     )
 
 
-def emit_cookiecutter_sources(target, source, env):
+def emit_cookiecutter_sources(
+    target: List[Node], source: List[Node], env: Environment
+) -> Tuple[List[Node], List[Node]]:
     """Emit the full list of sources for a Cookiecutter project, based on
     the root ``cookiecutter.json`` source.
 
@@ -133,8 +140,10 @@ cookiecutter project.
 
 
 def format_content(
-    target, source, env, line_format=None, header=None, footer=None
-):
+    target: List[Node],
+    source: List[Node],
+    env: Environment,
+) -> None:
     """Scons builder action for rendering a Python comment from a plain
     text file.
 

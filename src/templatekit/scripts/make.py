@@ -4,13 +4,14 @@
 __all__ = ("make",)
 
 import os
+from typing import Dict, Optional
 
 import click
 import pyperclip
 from cookiecutter.main import cookiecutter
 
 from ..filerender import render_file_template
-from ..repo import FileTemplate
+from ..repo import FileTemplate, ProjectTemplate, Repo
 
 
 @click.command(short_help="Make a file or project from a template.")
@@ -31,7 +32,12 @@ from ..repo import FileTemplate
     help="Copy a rendered file/snippet to the clipboard.",
 )
 @click.pass_obj
-def make(state, name, output_path, copy_to_clipboard):
+def make(
+    state: Dict[str, Repo],
+    name: str,
+    output_path: Optional[str],
+    copy_to_clipboard: bool,
+) -> None:
     """Make a file or project from a template called <template name>.
 
     You will be prompted to configure the template.
@@ -65,10 +71,13 @@ def make(state, name, output_path, copy_to_clipboard):
     if isinstance(template, FileTemplate):
         _handle_file_template(template, output_path, copy_to_clipboard)
     else:
+        assert isinstance(template, ProjectTemplate)
         _handle_project_template(template, output_path)
 
 
-def _handle_file_template(template, output_path, copy_to_clipboard):
+def _handle_file_template(
+    template: FileTemplate, output_path: Optional[str], copy_to_clipboard: bool
+) -> None:
     """Handle rendering and output for a file template."""
     rendered_text = render_file_template(
         template.source_path, use_defaults=False
@@ -92,7 +101,9 @@ def _handle_file_template(template, output_path, copy_to_clipboard):
         click.echo("Copied to clipboard")
 
 
-def _handle_project_template(template, output_path):
+def _handle_project_template(
+    template: ProjectTemplate, output_path: Optional[str]
+) -> None:
     """Handle rendering and output for a project template."""
     template_dir = template.path
 

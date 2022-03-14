@@ -7,6 +7,7 @@ import io
 import logging
 import os
 import shutil
+from typing import Any, Dict, Optional
 
 from cookiecutter.environment import StrictEnvironment
 from cookiecutter.generate import generate_context
@@ -16,8 +17,10 @@ from jinja2.exceptions import TemplateSyntaxError
 
 
 def render_file_template(
-    template_path, use_defaults=False, extra_context=None
-):
+    template_path: str,
+    use_defaults: bool = False,
+    extra_context: Optional[Dict[str, Any]] = None,
+) -> str:
     """Render a single-file template with Cookiecutter.
 
     Currently this function only renders a file using default values defined
@@ -74,8 +77,10 @@ def render_file_template(
 
 
 def render_and_write_file_template(
-    template_path, output_path, extra_context=None
-):
+    template_path: str,
+    output_path: str,
+    extra_context: Optional[Dict[str, Any]] = None,
+) -> None:
     """Render a single-file template and write it to the filesystem.
 
     Parameters
