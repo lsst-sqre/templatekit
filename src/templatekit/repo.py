@@ -117,7 +117,9 @@ class Repo(object):
 
     @property
     def file_templates_dirname(self):
-        """Path of the ``file_templates`` directory in the repository (`str`)."""
+        """Path of the ``file_templates`` directory in the repository
+        (`str`).
+        """
         return os.path.join(self.root, "file_templates")
 
     @property

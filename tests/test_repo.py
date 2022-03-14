@@ -11,7 +11,9 @@ from templatekit.repo import FileTemplate, ProjectTemplate, Repo
 
 @contextlib.contextmanager
 def work_dir(workdirname):
-    """Temporarily change the current working directory (as a context manager)."""
+    """Temporarily change the current working directory (as a context
+    manager).
+    """
     prev_cwd = os.getcwd()
     os.chdir(workdirname)
     try:
