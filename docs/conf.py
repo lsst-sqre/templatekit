@@ -7,6 +7,18 @@ from documenteer.sphinxconfig.utils import form_ltd_edition_name
 # Work around Sphinx bug related to large and highly-nested source files
 sys.setrecursionlimit(2000)
 
+# -- Common links and substitutions ---------------------------------------
+
+rst_epilog = """
+
+.. _Cookiecutter: https://cookiecutter.readthedocs.io/en/latest/
+.. _Jinja: http://jinja.pocoo.org
+.. _lsst/templates: https://github.com/lsst/templates
+.. _mypy: http://www.mypy-lang.org
+.. _tox: https://tox.readthedocs.io/en/latest/
+.. _pytest: https://docs.pytest.org/en/latest/
+"""
+
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -84,13 +96,6 @@ intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
     "cookiecutter": ("https://cookiecutter.readthedocs.io/en/latest/", None),
 }
-
-rst_epilog = """
-
-.. _Cookiecutter: https://cookiecutter.readthedocs.io/en/latest/
-.. _Jinja: http://jinja.pocoo.org
-.. _lsst/templates: https://github.com/lsst/templates
-"""
 
 # -- Options for linkcheck builder ----------------------------------------
 

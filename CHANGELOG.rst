@@ -27,7 +27,7 @@ Change log
 0.3.0 (2019-10-08)
 ==================
 
-- A new Jinja filter, ``escape_yaml_doublequoted``, is available as part of the `templatekit.TemplatekitExtension`.
+- A new Jinja filter, ``escape_yaml_doublequoted``, is available as part of the ``templatekit.TemplatekitExtension``.
   This filter is meant to be used with template variables that are inside double-quoted string fields in a YAML file.
   The filter escapes both double quote characters (``"``) and backslash characters (``\``).
 - There is a new "Template developer" guide, which lists the ``escape_yaml_doublequoted`` filter and provides tips on how to write YAML files in templates.
