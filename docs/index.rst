@@ -14,12 +14,11 @@ Templatekit is available from `PyPI <https://pypi.org/project/templatekit/>`_:
 
    pip install templatekit
 
-Getting started
-===============
+:doc:`See Templatekit's release history <changelog>`.
 
 .. toctree::
-   :maxdepth: 1
-
+   :hidden:
+   
    changelog
 
 
