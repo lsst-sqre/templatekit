@@ -2,6 +2,13 @@
 Change log
 ##########
 
+0.5.0 (unreleased)
+==================
+
+- Update build system to current SQuaRE standards.
+- Add type annotations for all code.
+- Unpin all dependencies for easier use as a library.
+
 0.4.1 (2020-02-26)
 ==================
 
