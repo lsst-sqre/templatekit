@@ -89,9 +89,9 @@ def test_getitem(templates_repo: str) -> None:
         assert isinstance(copyright_template, FileTemplate)
         assert copyright_template.name == "copyright"
 
-        example_project_template = repo["example_project"]
+        example_project_template = repo["fastapi_safir_app"]
         assert isinstance(example_project_template, ProjectTemplate)
-        assert example_project_template.name == "example_project"
+        assert example_project_template.name == "fastapi_safir_app"
 
 
 def test_contains(templates_repo: str) -> None:
@@ -100,5 +100,5 @@ def test_contains(templates_repo: str) -> None:
         repo = Repo(".")
 
         assert "copyright" in repo
-        assert "example_project" in repo
+        assert "fastapi_safir_app" in repo
         assert "whatwhat" not in repo
