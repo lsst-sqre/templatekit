@@ -1,22 +1,26 @@
 """Rendering file templates with Cookiecutter.
 """
 
-__all__ = ('render_file_template', 'render_and_write_file_template')
+__all__ = ("render_file_template", "render_and_write_file_template")
 
-import logging
 import io
+import logging
 import os
 import shutil
+from typing import Any, Dict, Optional
 
+from cookiecutter.environment import StrictEnvironment
 from cookiecutter.generate import generate_context
 from cookiecutter.prompt import prompt_for_config
-from cookiecutter.environment import StrictEnvironment
 from jinja2 import FileSystemLoader
 from jinja2.exceptions import TemplateSyntaxError
 
 
-def render_file_template(template_path, use_defaults=False,
-                         extra_context=None):
+def render_file_template(
+    template_path: str,
+    use_defaults: bool = False,
+    extra_context: Optional[Dict[str, Any]] = None,
+) -> str:
     """Render a single-file template with Cookiecutter.
 
     Currently this function only renders a file using default values defined
@@ -42,16 +46,16 @@ def render_file_template(template_path, use_defaults=False,
         Content rendered from the template and ``cookiecutter.json`` defaults.
     """
     logger = logging.getLogger(__name__)
-    logger.debug('Rendering file template %s', template_path)
+    logger.debug("Rendering file template %s", template_path)
 
     # Get variables for rendering the template
     template_dir = os.path.dirname(template_path)
-    context_file = os.path.join(template_dir, 'cookiecutter.json')
+    context_file = os.path.join(template_dir, "cookiecutter.json")
     context = generate_context(context_file=context_file)
-    context['cookiecutter'] = prompt_for_config(context, use_defaults)
+    context["cookiecutter"] = prompt_for_config(context, use_defaults)
 
     if extra_context is not None:
-        context['cookiecutter'].update(extra_context)
+        context["cookiecutter"].update(extra_context)
 
     # Jinja2 template rendering environment
     env = StrictEnvironment(
@@ -72,8 +76,11 @@ def render_file_template(template_path, use_defaults=False,
     return rendered_text
 
 
-def render_and_write_file_template(template_path, output_path,
-                                   extra_context=None):
+def render_and_write_file_template(
+    template_path: str,
+    output_path: str,
+    extra_context: Optional[Dict[str, Any]] = None,
+) -> None:
     """Render a single-file template and write it to the filesystem.
 
     Parameters
@@ -92,11 +99,12 @@ def render_and_write_file_template(template_path, output_path,
     """
     logger = logging.getLogger(__name__)
 
-    rendered_text = render_file_template(template_path, use_defaults=True,
-                                         extra_context=extra_context)
+    rendered_text = render_file_template(
+        template_path, use_defaults=True, extra_context=extra_context
+    )
 
-    logger.debug('Writing rendered file to {}'.format(output_path))
-    with io.open(output_path, 'w', encoding='utf-8') as fh:
+    logger.debug("Writing rendered file to {}".format(output_path))
+    with io.open(output_path, "w", encoding="utf-8") as fh:
         fh.write(rendered_text)
 
     # Apply file permissions to output file

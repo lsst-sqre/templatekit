@@ -2,10 +2,11 @@
 """
 
 import os
+
 from templatekit.filerender import render_file_template
 
 
-def test_render_file_template(templates_repo):
+def test_render_file_template(templates_repo: str) -> None:
     """Test render_file_template().
 
     This test uses file_templates/stack_license_preamble_txt/template.txt.jinja
@@ -13,11 +14,12 @@ def test_render_file_template(templates_repo):
     """
     template_path = os.path.join(
         templates_repo,
-        'file_templates/stack_license_preamble_txt/template.txt.jinja')
+        "file_templates/stack_license_preamble_txt/template.txt.jinja",
+    )
 
     expected_content_path = os.path.join(
-        templates_repo,
-        'file_templates/stack_license_preamble_txt/example.txt')
+        templates_repo, "file_templates/stack_license_preamble_txt/example.txt"
+    )
     with open(expected_content_path) as fh:
         expected_content = fh.read()
 
