@@ -32,7 +32,21 @@ If the change log or documentation needs additional updates, now is the time to 
 In particular, replace the "Unreleased" section headline with the semantic version and date.
 See :ref:`dev-change-log` in the *Developer guide* for details.
 
-2. Tag the release
+2. Update the templates submodule
+---------------------------------
+
+Templatekit uses a submodule of the `templates repository <https://github.com/lsst-sqre/templates/>`__ as test data.
+Git submodules are pinned to a specific release, so this will not automatically pick up the latest changes to the templates.
+
+To ensure that Templatekit works properly with the latest templates, and to avoid letting the test data fall too far behind, the submodule should be updated before each release.
+
+To do this, run:
+
+.. code-block:: sh
+
+   git submodule update --remote
+
+3. Tag the release
 ------------------
 
 At the HEAD of the ``master`` branch, create and push a tag with the semantic version:
