@@ -54,6 +54,14 @@ jobs:
           # impact the tox environment.
           key: tox-${{ matrix.python }}-${{ hashFiles('pyproject.toml', 'setup.cfg') }}
 
+      # If and only if this is the scheduled weekly CI run, move the pin of
+      # the templates repository used for test data before running the tests.
+      # This ensures that templatekit still works with the current templates
+      # repository.
+      - name: Update template test data
+        run: git submodule update --remote
+        if: github.event_name == 'schedule'
+
       - name: Run tox
         run: tox -e py,typing
 
