@@ -2,7 +2,7 @@
 Change log
 ##########
 
-0.5.0 (unreleased)
+0.5.0 (2022-03-15)
 ==================
 
 - Update build system to current SQuaRE standards.
