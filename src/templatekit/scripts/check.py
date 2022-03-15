@@ -33,7 +33,7 @@ def check(state: Dict[str, Repo]) -> None:
     scons_result = repo.build()
     if scons_result.returncode > 0:
         message = (
-            '"scons" failed with status {0!d}\n\nThis means that the examples '
+            '"scons" failed with status {0:d}\n\nThis means that the examples '
             "could not be successfully generated because of an issue with the "
             "Cookiecutter templates. Check the scons output, above, for "
             "debugging hints."

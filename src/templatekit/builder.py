@@ -27,7 +27,8 @@ from typing import List, Tuple
 
 from cookiecutter.find import find_template
 from cookiecutter.main import cookiecutter
-from SCons.Script import Builder, Environment, Node
+from SCons.Node import Node
+from SCons.Script import Builder, Environment
 
 from .filerender import render_and_write_file_template
 from .textutils import reformat_content_lines
@@ -40,11 +41,11 @@ def build_file_template(
 
     Parameters
     ----------
-    target : `list` of `Scons.Script.Node`
+    target : `list` of `SCons.Node.Node`
         A list of Node objects corresponding to examples to be built.
-    source : `list` of `Scons.Script.Node`
+    source : `list` of `SCons.Node.Node`
         A list of Node objects corresponding to file templates.
-    env : `Scons.Script.Environment`
+    env : `SCons.Script.Environment`
         The construction environment used for building the target.
     """
     target_path = str(target[0])
@@ -75,12 +76,12 @@ def build_project_template(
 
     Parameters
     ----------
-    target : `list` of `Scons.Script.Node`
+    target : `list` of `SCons.Node.Node`
         A list of Node objects corresponding to examples to be built.
-    source : `list` of `Scons.Script.Node`
+    source : `list` of `SCons.Node.Node`
         A list of Node objects containing only the ``cookiecutter.json`` file
         node.
-    env : `Scons.Script.Environment`
+    env : `SCons.Script.Environment`
         The construction environment used for building the target. The
         following construction environment variables are used:
 
@@ -149,11 +150,11 @@ def format_content(
 
     Parameters
     ----------
-    target : `list` of `Scons.Script.Node`
+    target : `list` of `SCons.Node.Node`
         A list of Node objects corresponding to examples to be built.
-    source : `list` of `Scons.Script.Node`
+    source : `list` of `SCons.Node.Node`
         A list of Node objects corresponding to file templates.
-    env : `Scons.Script.Environment`
+    env : `SCons.Script.Environment`
         The construction environment used for building the target.
     """
     target_path = str(target[0])

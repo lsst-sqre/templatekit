@@ -36,7 +36,7 @@ def test_validation(templates_repo: str) -> None:
     "path,expected",
     [
         ("file_templates/license_gplv3", "license_gplv3"),
-        ("project_templates/example_project", "example_project"),
+        ("project_templates/fastapi_safir_app", "fastapi_safir_app"),
     ],
 )
 def test_name(templates_repo: str, path: str, expected: str) -> None:
@@ -50,7 +50,7 @@ def test_name(templates_repo: str, path: str, expected: str) -> None:
     "path",
     [
         "file_templates/license_gplv3",
-        "project_templates/example_project",
+        "project_templates/fastapi_safir_app",
     ],
 )
 def test_cookiecutter_json_path(templates_repo: str, path: str) -> None:
