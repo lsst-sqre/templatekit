@@ -2,6 +2,12 @@
 Change log
 ##########
 
+0.5.1 (2022-03-15)
+==================
+
+- Fix an incorrect import in the SCons builder.
+- Fix reporting of SCons status in ``templatekit check``.
+
 0.5.0 (2022-03-15)
 ==================
 
