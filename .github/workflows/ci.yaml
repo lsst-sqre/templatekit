@@ -14,8 +14,6 @@ name: Python CI
     tags:
       - "*"
   pull_request: {}
-  schedule:
-    - cron: "0 12 * * 1"
 
 jobs:
   test:
@@ -38,6 +36,8 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python }}
+          cache: "pip"
+          cache-dependency-path: "setup.cfg"
 
       - name: Run pre-commit
         uses: pre-commit/action@v2.0.3
@@ -54,14 +54,6 @@ jobs:
           # impact the tox environment.
           key: tox-${{ matrix.python }}-${{ hashFiles('pyproject.toml', 'setup.cfg') }}
 
-      # If and only if this is the scheduled weekly CI run, move the pin of
-      # the templates repository used for test data before running the tests.
-      # This ensures that templatekit still works with the current templates
-      # repository.
-      - name: Update template test data
-        run: git submodule update --remote
-        if: github.event_name == 'schedule'
-
       - name: Run tox
         run: tox -e py,typing
 
@@ -76,6 +68,8 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: "3.10"
+          cache: "pip"
+          cache-dependency-path: "setup.cfg"
 
       - name: Install Graphviz
         run: sudo apt-get install graphviz
@@ -96,9 +90,8 @@ jobs:
           LTD_PASSWORD: ${{ secrets.LTD_PASSWORD }}
         run: ltd upload --product templatekit --gh --dir docs/_build/html
         if: >
-          github.event_name != 'schedule'
-          && (github.event_name != 'pull_request'
-              || startsWith(github.head_ref, 'tickets/'))
+          github.event_name != 'pull_request'
+          || startsWith(github.head_ref, 'tickets/')
 
   pypi:
 
@@ -115,6 +108,8 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: "3.10"
+          cache: "pip"
+          cache-dependency-path: "setup.cfg"
 
       - name: Install dependencies
         run: |
