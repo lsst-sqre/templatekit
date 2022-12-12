@@ -10,6 +10,17 @@ name: Periodic CI
     - cron: "0 12 * * 1"
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Run pre-commit
+        uses: pre-commit/action@v3.0.0
+
   test:
     runs-on: ubuntu-latest
 
@@ -25,19 +36,6 @@ jobs:
         with:
           submodules: true
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python }}
-          cache: "pip"
-          cache-dependency-path: "setup.cfg"
-
-      - name: Run pre-commit
-        uses: pre-commit/action@v3.0.0
-
-      - name: Install tox
-        run: pip install tox tox-docker
-
       # Move the pin of the templates repository used for test data before
       # running the tests.  This ensures that templatekit still works with the
       # current templates repository.
@@ -45,4 +43,22 @@ jobs:
         run: git submodule update --remote
 
       - name: Run tox
-        run: tox -e py,typing
+        uses: lsst-sqre/run-tox@v1
+        with:
+          python-version: ${{ matrix.python }}
+          tox-envs: "py,typing"
+
+  pypi:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # full history for setuptools_scm
+
+      - name: Upload
+        uses: lsst-sqre/build-and-publish-to-pypi@v1
+        with:
+          pypi-token: ${{ secrets.PYPI_SQRE_ADMIN }}
+          python-version: "3.10"
+          upload: false
