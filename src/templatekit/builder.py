@@ -122,7 +122,7 @@ def emit_cookiecutter_sources(
     # Get the template directory (i.e., "{{ cookiecutter.project_name }}/")
     template_dir = find_template(".")
     # Get all the template files and add them to the sources
-    for (_base_path, _dir_names, _file_names) in os.walk(template_dir):
+    for _base_path, _dir_names, _file_names in os.walk(template_dir):
         source.extend(
             [os.path.join(_base_path, file_name) for file_name in _file_names]
         )
