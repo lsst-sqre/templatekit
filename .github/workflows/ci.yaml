@@ -75,7 +75,7 @@ jobs:
           github.event_name != 'pull_request'
           || startsWith(github.head_ref, 'tickets/')
         with:
-          project: "example"
+          project: "templatekit"
           dir: "docs/_build/html"
           username: ${{ secrets.LTD_USERNAME }}
           password: ${{ secrets.LTD_PASSWORD }}
