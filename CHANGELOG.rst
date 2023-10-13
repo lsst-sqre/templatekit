@@ -2,6 +2,17 @@
 Change log
 ##########
 
+0.6.0 (2023-10-13)
+==================
+
+- Add a new ``-i/--ignore`` option to the ``templatekit check`` command.
+  This option allows the user to ignore certain files when checking for untracked files or dirty Git state after regenerating examples.
+  This is useful for files that have dynamic content, such as dates and times, that we do not expect to be consistent.
+- Migrate the packaging to ``pyproject.toml`` and retire the ``setup.cfg`` and ``setup.py`` files.
+- Migrate to the new Rubin user guide theme for documentation.
+- Add GitHub Actions workflow to update pre-commit hooks with Neophile.
+- Adopted the PyPI trusted publishers workflow.
+
 0.5.1 (2022-03-15)
 ==================
 

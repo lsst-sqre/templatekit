@@ -1,12 +1,77 @@
-[build-system]
-requires = [
-    "setuptools>=42",
-    "wheel",
-    "setuptools_scm[toml]>=3.4"
+[project]
+# https://packaging.python.org/en/latest/specifications/declaring-project-metadata/
+name = "templatekit"
+description = "Tookit for rendering Rubin Observatory project templates"
+license = { file = "LICENSE" }
+readme = "README.rst"
+keywords = ["rubin", "lsst"]
+# https://pypi.org/classifiers/
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Operating System :: POSIX",
+    "Typing :: Typed",
 ]
-build-backend = 'setuptools.build_meta'
+requires-python = ">=3.8"
+dependencies = [
+    "Cerberus>=1.2",
+    "click",
+    "cookiecutter>=1.6.0",
+    "GitPython>=3.0.0",
+    "Jinja2>=2.10",
+    "pyperclip>=1.6.0",
+    "PyYAML>=5.1",
+    "scons>=3.0.1",
+]
+dynamic = ["version"]
+
+[[project.authors]]
+name = "Association of Universities for Research in Astronomy, Inc. (AURA)"
+email = "sqre-admin@lists.lsst.org"
+
+[[project.authors]]
+name = "Jonathan Sick"
+email = "jsick@lsst.org"
+
+
+[project.optional-dependencies]
+dev = [
+    "coverage[toml]",
+    "mypy",
+    "pre-commit",
+    "pytest",
+    "pytest-cov",
+    "types-PyYAML",
+    # documentation
+    "documenteer[guide]",
+    "sphinx-click",
+]
+
+[project.urls]
+Homepage = "https://templatekit.lsst.io"
+Source = "https://github.com/lsst-sqre/templatekit"
+
+[project.scripts]
+templatekit = "templatekit.scripts.main:main"
+
+[build-system]
+requires = ["setuptools>=61", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
+
+[tool.setuptools.packages.find]
+# https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
+where = ["src"]
+include = ["templatekit*"]
 
 [tool.coverage.run]
 parallel = true
@@ -49,9 +114,9 @@ exclude = '''
 # Multi-line strings are implicitly treated by black as regular expressions
 
 [tool.isort]
-include_trailing_comma = true
-multi_line_output = 3
-known_first_party = ["templatekit", "tests"]
+profile = "black"
+line_length = 79
+known_first_party = "templatekit"
 skip = ["docs/conf.py"]
 
 [tool.pytest.ini_options]
@@ -68,4 +133,17 @@ norecursedirs = [
 # listed in python_files.
 python_files = [
     "tests/*.py",
+]
+
+[tool.mypy]
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+ignore_missing_imports = true
+show_error_codes = true
+strict_equality = true
+warn_redundant_casts = true
+warn_unreachable = true
+warn_unused_ignores = true
+exclude = [
+    "tests/data",
 ]
