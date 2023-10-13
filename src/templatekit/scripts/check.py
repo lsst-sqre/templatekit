@@ -5,7 +5,7 @@ operation.
 __all__ = ("check",)
 
 import sys
-from typing import Dict
+from typing import Dict, List
 
 import click
 
@@ -13,8 +13,16 @@ from ..repo import Repo
 
 
 @click.command(short_help="Check the template repository")
+@click.option(
+    "-i",
+    "--ignore",
+    "ignored_files",
+    multiple=True,
+    type=click.Path(exists=True, dir_okay=False),
+    help="Ignore a file when checking consistency of examples.",
+)
 @click.pass_obj
-def check(state: Dict[str, Repo]) -> None:
+def check(state: Dict[str, Repo], ignored_files: List[str]) -> None:
     """Check the template repository for valid structure and operation.
 
     The following checks are performed:
@@ -41,7 +49,7 @@ def check(state: Dict[str, Repo]) -> None:
         sys.exit(message.format(scons_result.returncode))
 
     error_count = 0
-    error_count += _test_git_state(repo)
+    error_count += _test_git_state(repo, ignored_files)
 
     if error_count == 1:
         sys.exit(
@@ -57,7 +65,7 @@ def check(state: Dict[str, Repo]) -> None:
         print("✅ Passed!")
 
 
-def _test_git_state(repo: Repo) -> int:
+def _test_git_state(repo: Repo, ignored_files: List[str]) -> int:
     """Test if the Git repository of the template repository is clean.
     (no modified files and no untracked files).
     """
@@ -65,7 +73,7 @@ def _test_git_state(repo: Repo) -> int:
 
     if repo.is_git_dirty():
         error_count += _test_untracked_files(repo)
-        error_count += _test_uncommitted_changes(repo)
+        error_count += _test_uncommitted_changes(repo, ignored_files)
 
     return error_count
 
@@ -81,7 +89,7 @@ def _test_untracked_files(repo: Repo) -> int:
     return error_count
 
 
-def _test_uncommitted_changes(repo: Repo) -> int:
+def _test_uncommitted_changes(repo: Repo, ignored_files: List[str]) -> int:
     error_count = 0
     # Get all uncommitted changes because we don't have a count of them
     # otherwise
@@ -91,6 +99,8 @@ def _test_uncommitted_changes(repo: Repo) -> int:
         for change in diffindex.iter_change_type(
             changetype  # type: ignore[arg-type]  # GitPython typing bug
         ):
+            if change.a_path in ignored_files:
+                continue
             # For deleted files, we want to use the original ("a") path.
             # Otherwise, we tend to want to show the user the new ("b") path
             if changetype in ("D",):
