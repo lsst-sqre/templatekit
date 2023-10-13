@@ -19,30 +19,7 @@ Templatekit is available from `PyPI <https://pypi.org/project/templatekit/>`_:
 .. toctree::
    :hidden:
    
+   user-guide/index
+   Template guide <template-guide/index>
    changelog
-
-
-User guide
-==========
-
-.. toctree::
-   :maxdepth: 1
-
-   cli-reference
-
-Template development guide
-==========================
-
-.. toctree::
-   :maxdepth: 2
-
-   template-guide/index
-
-Development guide
-=================
-
-.. toctree::
-   :maxdepth: 1
-
-   dev/development
-   dev/release
+   dev/index

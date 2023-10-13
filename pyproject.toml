@@ -51,7 +51,7 @@ dev = [
     "pytest-cov",
     "types-PyYAML",
     # documentation
-    "documenteer[pipelines]",
+    "documenteer[guide]",
     "sphinx-click",
 ]
 
