@@ -96,9 +96,7 @@ def _test_uncommitted_changes(repo: Repo, ignored_files: List[str]) -> int:
     uncommitted_changes = []
     diffindex = repo.get_uncommitted_files()
     for changetype in diffindex.change_type:
-        for change in diffindex.iter_change_type(
-            changetype  # type: ignore[arg-type]  # GitPython typing bug
-        ):
+        for change in diffindex.iter_change_type(changetype):
             if change.a_path in ignored_files:
                 continue
             # For deleted files, we want to use the original ("a") path.
