@@ -49,6 +49,7 @@ dev = [
     "pre-commit",
     "pytest",
     "pytest-cov",
+    "ruff",
     "types-PyYAML",
     # documentation
     "documenteer[guide]",
@@ -95,29 +96,54 @@ exclude_lines = [
     "if TYPE_CHECKING:"
 ]
 
-[tool.black]
-line-length = 79
-target-version = ['py38']
-exclude = '''
-/(
-    \.eggs
-  | \.git
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | _build
-  | build
-  | dist
-)/
-'''
-# Use single-quoted strings so TOML treats the string like a Python r-string
-# Multi-line strings are implicitly treated by black as regular expressions
+[tool.ruff]
+extend = "ruff-shared.toml"
+target-version = "py38"
 
-[tool.isort]
-profile = "black"
-line_length = 79
-known_first_party = "templatekit"
-skip = ["docs/conf.py"]
+[tool.ruff.lint.isort]
+known-first-party = ["templatekit", "tests"]
+split-on-trailing-comma = false
+
+[tool.ruff.lint.extend-per-file-ignores]
+# Pre-existing os.path usage and other judgment-call findings from
+# newly adopting ruff's full rule set; not rewritten mechanically to
+# avoid behavior changes. Revisit as a follow-up cleanup.
+"src/**" = [
+    "PTH100", # os.path.abspath
+    "PTH103", # os.makedirs
+    "PTH109", # os.getcwd
+    "PTH110", # os.path.exists
+    "PTH112", # os.path.isdir
+    "PTH113", # os.path.isfile
+    "PTH118", # os.path.join
+    "PTH119", # os.path.basename
+    "PTH120", # os.path.dirname
+    "PTH122", # os.path.splitext
+    "PTH123", # open()
+    "PTH208", # os.listdir/scandir
+    "LOG015", # root logger warning() calls
+    "S602",   # subprocess shell=True
+    "PLW1510", # subprocess.run without explicit check
+    "C901",   # pre-existing complexity in Repo.normalize
+    "B007",   # pre-existing unused loop variable
+    "B904",   # pre-existing bare raise in except
+    "FBT001", # pre-existing boolean positional args
+    "FBT002", # pre-existing boolean positional defaults
+    "S101",   # pre-existing assert in CLI scripts
+    "PERF401", # pre-existing manual list build
+]
+"tests/**" = [
+    "PT011", # pytest.raises without match, pre-existing across test suite
+    "INP001", # tests are not a package by design
+    "PTH100", # os.path.abspath
+    "PTH109", # os.getcwd
+    "PTH112", # os.path.isdir
+    "PTH113", # os.path.isfile
+    "PTH118", # os.path.join
+    "PTH119", # os.path.basename
+    "PTH120", # os.path.dirname
+    "PTH123", # open()
+]
 
 [tool.pytest.ini_options]
 norecursedirs = [

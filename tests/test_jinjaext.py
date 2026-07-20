@@ -1,5 +1,4 @@
-"""Tests for the templatekit.jinjaext module.
-"""
+"""Tests for the templatekit.jinjaext module."""
 
 import pytest
 
@@ -17,7 +16,7 @@ def test_cpp_namespace_code() -> None:
     """Test convert_py_to_cpp_namespace_code."""
     python_namespace = "lsst.example"
 
-    expected = "namespace lsst { example {\n" "\n" "}} // lsst::example"
+    expected = "namespace lsst { example {\n\n}} // lsst::example"
 
     assert expected == convert_py_to_cpp_namespace_code(python_namespace)
 
@@ -37,7 +36,7 @@ def test_cpp_namespace() -> None:
 
 
 @pytest.mark.parametrize(
-    "python_namespace,expected",
+    ("python_namespace", "expected"),
     [
         ("lsst.example", "lsst"),
         ("lsst.example.subpackage", "lsst/example"),
@@ -48,7 +47,7 @@ def test_includes_dir(python_namespace: str, expected: str) -> None:
 
 
 @pytest.mark.parametrize(
-    "python_namespace,expected",
+    ("python_namespace", "expected"),
     [
         ("lsst.example", "example.h"),
         ("lsst.example.subpackage", "subpackage.h"),
@@ -57,11 +56,11 @@ def test_includes_dir(python_namespace: str, expected: str) -> None:
 def test_header_name(python_namespace: str, expected: str) -> None:
     assert expected == convert_py_namespace_to_header_filename(
         python_namespace
-    )  # noqa E501
+    )
 
 
 @pytest.mark.parametrize(
-    "string,expected",
+    ("string", "expected"),
     [
         ("hello world", "hello world"),
         ('hello "world"', 'hello \\"world\\"'),

@@ -1,5 +1,4 @@
-"""Test the templatekit.repo.BaseTemplate class.
-"""
+"""Test the templatekit.repo.BaseTemplate class."""
 
 import os
 
@@ -33,7 +32,7 @@ def test_validation(templates_repo: str) -> None:
 
 
 @pytest.mark.parametrize(
-    "path,expected",
+    ("path", "expected"),
     [
         ("file_templates/license_gplv3", "license_gplv3"),
         ("project_templates/fastapi_safir_app", "fastapi_safir_app"),

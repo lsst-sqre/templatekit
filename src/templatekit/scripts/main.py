@@ -1,9 +1,9 @@
-"""Main command-line interface for templatekit.
-"""
+"""Main command-line interface for templatekit."""
+
+from __future__ import annotations
 
 __all__ = ("main",)
 
-from typing import Optional
 
 import click
 
@@ -13,7 +13,7 @@ from .listtemplates import list_templates
 from .make import make
 
 # Add -h as a help shortcut option
-CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
+CONTEXT_SETTINGS = {"help_option_names": ["-h", "--help"]}
 
 
 @click.group(context_settings=CONTEXT_SETTINGS)
@@ -31,7 +31,7 @@ CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 )
 @click.pass_context
 def main(ctx: click.Context, template_repo: str) -> None:
-    """templatekit is a CLI for lsst/templates, LSST's project template
+    """Templatekit is a CLI for lsst/templates, LSST's project template
     repository.
 
     Use templatekit to learn about available templates, and to create a new
@@ -50,7 +50,7 @@ def main(ctx: click.Context, template_repo: str) -> None:
 @main.command()
 @click.argument("topic", default=None, required=False, nargs=1)
 @click.pass_context
-def help(ctx: click.Context, topic: Optional[str]) -> None:
+def help(ctx: click.Context, topic: str | None) -> None:
     """Show help for any command."""
     # The help command implementation is taken from
     # https://www.burgundywall.com/post/having-click-help-subcommand

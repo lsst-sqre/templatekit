@@ -1,12 +1,11 @@
-"""Custom Jinja2 filters and tags.
-"""
+"""Custom Jinja2 filters and tags."""
 
 __all__ = (
-    "convert_py_to_cpp_namespace_code",
     "convert_py_namespace_to_cpp_header_def",
-    "convert_py_to_cpp_namespace",
-    "convert_py_namespace_to_includes_dir",
     "convert_py_namespace_to_header_filename",
+    "convert_py_namespace_to_includes_dir",
+    "convert_py_to_cpp_namespace",
+    "convert_py_to_cpp_namespace_code",
     "escape_yaml_doublequoted",
 )
 
@@ -52,27 +51,27 @@ class TemplatekitExtension(Extension):
       (`escape_yaml_doublequoted`)
     """
 
-    def __init__(self, environment: jinja2.Environment):
+    def __init__(self, environment: jinja2.Environment) -> None:
         super().__init__(environment)
 
-        environment.filters[
-            "convert_py_to_cpp_namespace_code"
-        ] = convert_py_to_cpp_namespace_code
-        environment.filters[
-            "convert_py_namespace_to_cpp_header_def"
-        ] = convert_py_namespace_to_cpp_header_def
-        environment.filters[
-            "convert_py_to_cpp_namespace"
-        ] = convert_py_to_cpp_namespace
-        environment.filters[
-            "convert_py_namespace_to_includes_dir"
-        ] = convert_py_namespace_to_includes_dir
-        environment.filters[
-            "convert_py_namespace_to_header_filename"
-        ] = convert_py_namespace_to_header_filename
-        environment.filters[
-            "escape_yaml_doublequoted"
-        ] = escape_yaml_doublequoted
+        environment.filters["convert_py_to_cpp_namespace_code"] = (
+            convert_py_to_cpp_namespace_code
+        )
+        environment.filters["convert_py_namespace_to_cpp_header_def"] = (
+            convert_py_namespace_to_cpp_header_def
+        )
+        environment.filters["convert_py_to_cpp_namespace"] = (
+            convert_py_to_cpp_namespace
+        )
+        environment.filters["convert_py_namespace_to_includes_dir"] = (
+            convert_py_namespace_to_includes_dir
+        )
+        environment.filters["convert_py_namespace_to_header_filename"] = (
+            convert_py_namespace_to_header_filename
+        )
+        environment.filters["escape_yaml_doublequoted"] = (
+            escape_yaml_doublequoted
+        )
 
 
 def convert_py_to_cpp_namespace_code(python_namespace: str) -> str:
@@ -99,13 +98,13 @@ def convert_py_to_cpp_namespace_code(python_namespace: str) -> str:
     -----
     Use this filter in a Cookiecutter template like this::
 
-        {{ 'lsst.example' | convert_py_to_cpp_namespace_code }}
+        {{"lsst.example" | convert_py_to_cpp_namespace_code}}
     """
     name = python_namespace.replace(".", "::")
     namespace_parts = python_namespace.split(".")
     opening = "namespace " + " { ".join(namespace_parts) + " {\n"
-    closing = "}" * len(namespace_parts) + " // {}".format(name)
-    return "\n".join((opening, closing))
+    closing = "}" * len(namespace_parts) + f" // {name}"
+    return f"{opening}\n{closing}"
 
 
 def convert_py_namespace_to_cpp_header_def(python_namespace: str) -> str:

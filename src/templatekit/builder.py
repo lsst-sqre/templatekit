@@ -16,14 +16,15 @@ given the template defaults. Users will use cookiecutter directly to generate
 new projects from a template.
 """
 
+from __future__ import annotations
+
 __all__ = (
-    "file_template_builder",
     "cookiecutter_project_builder",
+    "file_template_builder",
     "line_format_builder",
 )
 
 import os
-from typing import List, Tuple
 
 from cookiecutter.find import find_template
 from cookiecutter.main import cookiecutter
@@ -35,7 +36,7 @@ from .textutils import reformat_content_lines
 
 
 def build_file_template(
-    target: List[Node], source: List[Node], env: Environment
+    target: list[Node], source: list[Node], env: Environment
 ) -> None:
     """Scons builder action for rendering a single-file template.
 
@@ -70,7 +71,7 @@ file_template_builder = Builder(
 
 
 def build_project_template(
-    target: List[Node], source: List[Node], env: Environment
+    target: list[Node], source: list[Node], env: Environment
 ) -> None:
     """Scons builder action for rendering a cookiecutter project template.
 
@@ -110,8 +111,8 @@ def build_project_template(
 
 
 def emit_cookiecutter_sources(
-    target: List[Node], source: List[Node], env: Environment
-) -> Tuple[List[Node], List[Node]]:
+    target: list[Node], source: list[Node], env: Environment
+) -> tuple[list[Node], list[Node]]:
     """Emit the full list of sources for a Cookiecutter project, based on
     the root ``cookiecutter.json`` source.
 
@@ -141,8 +142,8 @@ cookiecutter project.
 
 
 def format_content(
-    target: List[Node],
-    source: List[Node],
+    target: list[Node],
+    source: list[Node],
     env: Environment,
 ) -> None:
     """Scons builder action for rendering a Python comment from a plain

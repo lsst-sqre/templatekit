@@ -1,10 +1,10 @@
-"""Subcommand for making something from a template.
-"""
+"""Subcommand for making something from a template."""
+
+from __future__ import annotations
 
 __all__ = ("make",)
 
 import os
-from typing import Dict, Optional
 
 import click
 import pyperclip
@@ -33,12 +33,12 @@ from ..repo import FileTemplate, ProjectTemplate, Repo
 )
 @click.pass_obj
 def make(
-    state: Dict[str, Repo],
+    state: dict[str, Repo],
     name: str,
-    output_path: Optional[str],
+    output_path: str | None,
     copy_to_clipboard: bool,
 ) -> None:
-    """Make a file or project from a template called <template name>.
+    r"""Make a file or project from a template called <template name>.
 
     You will be prompted to configure the template.
 
@@ -63,8 +63,8 @@ def make(
         template = repo[name]
     except KeyError:
         message = (
-            "Template {0!r} isn't known. Run `templatekit list` to "
-            "list available templates.".format(name)
+            f"Template {name!r} isn't known. Run `templatekit list` to "
+            "list available templates."
         )
         raise click.UsageError(message)
 
@@ -76,7 +76,7 @@ def make(
 
 
 def _handle_file_template(
-    template: FileTemplate, output_path: Optional[str], copy_to_clipboard: bool
+    template: FileTemplate, output_path: str | None, copy_to_clipboard: bool
 ) -> None:
     """Handle rendering and output for a file template."""
     rendered_text = render_file_template(
@@ -85,8 +85,7 @@ def _handle_file_template(
 
     if output_path is None:
         # Just output to the console
-        print()
-        print(rendered_text)
+        pass
 
     else:
         # Write to a file
@@ -102,7 +101,7 @@ def _handle_file_template(
 
 
 def _handle_project_template(
-    template: ProjectTemplate, output_path: Optional[str]
+    template: ProjectTemplate, output_path: str | None
 ) -> None:
     """Handle rendering and output for a project template."""
     template_dir = template.path

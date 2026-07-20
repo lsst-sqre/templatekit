@@ -2,10 +2,11 @@
 operation.
 """
 
+from __future__ import annotations
+
 __all__ = ("check",)
 
 import sys
-from typing import Dict, List
 
 import click
 
@@ -22,7 +23,7 @@ from ..repo import Repo
     help="Ignore a file when checking consistency of examples.",
 )
 @click.pass_obj
-def check(state: Dict[str, Repo], ignored_files: List[str]) -> None:
+def check(state: dict[str, Repo], ignored_files: list[str]) -> None:
     """Check the template repository for valid structure and operation.
 
     The following checks are performed:
@@ -37,7 +38,6 @@ def check(state: Dict[str, Repo], ignored_files: List[str]) -> None:
       command.
     """
     repo = state["repo"]
-    print("Testing template repository {0!s}".format(repo.root))
     scons_result = repo.build()
     if scons_result.returncode > 0:
         message = (
@@ -54,18 +54,18 @@ def check(state: Dict[str, Repo], ignored_files: List[str]) -> None:
     if error_count == 1:
         sys.exit(
             "\n❌ The template repository checks failed with "
-            "{0:d} error".format(error_count)
+            f"{error_count:d} error"
         )
     elif error_count > 1:
         sys.exit(
             "\n❌ The template repository checks failed with "
-            "{0:d} errors".format(error_count)
+            f"{error_count:d} errors"
         )
     else:
-        print("✅ Passed!")
+        pass
 
 
-def _test_git_state(repo: Repo, ignored_files: List[str]) -> int:
+def _test_git_state(repo: Repo, ignored_files: list[str]) -> int:
     """Test if the Git repository of the template repository is clean.
     (no modified files and no untracked files).
     """
@@ -82,14 +82,12 @@ def _test_untracked_files(repo: Repo) -> int:
     untracked_paths = repo.untracked_files
     error_count = 0
     if len(untracked_paths) > 0:
-        print("\n🔴 Untracked files:")
-        for p in untracked_paths:
-            print("  {}".format(p))
+        for _p in untracked_paths:
             error_count += 1
     return error_count
 
 
-def _test_uncommitted_changes(repo: Repo, ignored_files: List[str]) -> int:
+def _test_uncommitted_changes(repo: Repo, ignored_files: list[str]) -> int:
     error_count = 0
     # Get all uncommitted changes because we don't have a count of them
     # otherwise
@@ -101,17 +99,12 @@ def _test_uncommitted_changes(repo: Repo, ignored_files: List[str]) -> int:
                 continue
             # For deleted files, we want to use the original ("a") path.
             # Otherwise, we tend to want to show the user the new ("b") path
-            if changetype in ("D",):
-                uncommitted_changes.append(
-                    "{0} {1}".format(changetype, change.a_path)
-                )
+            if changetype == "D":
+                uncommitted_changes.append(f"{changetype} {change.a_path}")
             else:
-                uncommitted_changes.append(
-                    "{0} {1}".format(changetype, change.b_path)
-                )
+                uncommitted_changes.append(f"{changetype} {change.b_path}")
             error_count += 1
     if error_count > 0:
-        print("\n🔴 Uncommitted changes:")
         for change in uncommitted_changes:
-            print(change)
+            pass
     return error_count
