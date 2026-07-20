@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 __all__ = (
-    "Repo",
+    "BaseTemplate",
     "FileTemplate",
     "ProjectTemplate",
-    "BaseTemplate",
+    "Repo",
     "TemplateConfig",
 )
 
@@ -19,14 +19,14 @@ import os
 import subprocess
 from copy import deepcopy
 from pathlib import Path
-from typing import Any, Dict, Iterator, List, Optional
+from typing import Any, Iterator
 
 import cerberus
 import git
 import yaml
 
 
-class Repo(object):
+class Repo:
     """Template repository.
 
     Parameters
@@ -36,10 +36,10 @@ class Repo(object):
         as the current working directory.
     """
 
-    def __init__(self, root: str):
+    def __init__(self, root: str) -> None:
         super().__init__()
         self._log = logging.getLogger(__name__)
-        self._gitrepo: Optional[git.Repo] = None
+        self._gitrepo: git.Repo | None = None
         self.root = root
 
     @classmethod
@@ -86,16 +86,13 @@ class Repo(object):
         if not os.path.isdir(os.path.join(dirname, "file_templates")):
             return False
 
-        if not os.path.isdir(os.path.join(dirname, "project_templates")):
-            return False
-
-        return True
+        return os.path.isdir(os.path.join(dirname, "project_templates"))
 
     def __repr__(self) -> str:
-        return "Repo({0!r})".format(self.root)
+        return f"Repo({self.root!r})"
 
     def __str__(self) -> str:
-        return "{0!r}\nProject templates: {1!s}\nFile templates: {2!s}".format(
+        return "{!r}\nProject templates: {!s}\nFile templates: {!s}".format(
             self,
             ", ".join([t.name for t in self.iter_project_templates()]),
             ", ".join([t.name for t in self.iter_file_templates()]),
@@ -115,7 +112,7 @@ class Repo(object):
             if template.name == key:
                 return template
 
-        message = "Template {0!r} not found".format(key)
+        message = f"Template {key!r} not found"
         raise KeyError(message)
 
     @property
@@ -128,7 +125,8 @@ class Repo(object):
     @property
     def project_templates_dirname(self) -> str:
         """Path of the ``project_templates`` directory in the repository
-        (`str`)."""
+        (`str`).
+        """
         return os.path.join(self.root, "project_templates")
 
     def iter_templates(self) -> Iterator[BaseTemplate]:
@@ -142,8 +140,7 @@ class Repo(object):
         """
         file_iterator = self.iter_file_templates()
         project_iterator = self.iter_project_templates()
-        for template in itertools.chain(project_iterator, file_iterator):
-            yield template
+        yield from itertools.chain(project_iterator, file_iterator)
 
     def iter_file_templates(self) -> Iterator[FileTemplate]:
         """Iterate over file templates in the repository.
@@ -195,7 +192,7 @@ class Repo(object):
                 continue
             yield template
 
-    def _list_directory_items(self, dirname: str) -> List[str]:
+    def _list_directory_items(self, dirname: str) -> list[str]:
         fs_items = os.listdir(dirname)
         fs_items.sort()
         fs_items = [os.path.join(dirname, item) for item in fs_items]
@@ -239,7 +236,7 @@ class Repo(object):
         )
 
     @property
-    def untracked_files(self) -> List[str]:
+    def untracked_files(self) -> list[str]:
         """The list of files not tracked by the Git repository (and not
         ignored).
         """
@@ -257,7 +254,7 @@ class Repo(object):
         return self.gitrepo.head.commit.diff(None)
 
 
-class BaseTemplate(object):
+class BaseTemplate:
     """Template (file or project) in the templates repo.
 
     Parameters
@@ -274,15 +271,15 @@ class BaseTemplate(object):
         template.
     """
 
-    def __init__(self, path: str):
+    def __init__(self, path: str) -> None:
         super().__init__()
-        self._cookiecutter_data: Optional[Dict[str, Any]] = None
+        self._cookiecutter_data: dict[str, Any] | None = None
         self._log = logging.getLogger(__name__)
         self.path = os.path.abspath(path)
 
         self._validate_template_dir()
 
-        with open(self.templatekit_yaml_path, "r") as f:
+        with open(self.templatekit_yaml_path) as f:
             config_data = yaml.safe_load(f)
         config = TemplateConfig(config_data)
         # Add default from cookiecutter.json
@@ -293,22 +290,22 @@ class BaseTemplate(object):
         repository, with a cookiecutter.json directory, etc.
         """
         if not os.path.isdir(self.path):
-            message = "File template directory {} not found.".format(self.path)
+            message = f"File template directory {self.path} not found."
             raise ValueError(message)
 
         if not os.path.isfile(self.cookiecutter_json_path):
-            message = "cookiecutter.json not found in {}".format(self.path)
+            message = f"cookiecutter.json not found in {self.path}"
             raise ValueError(message)
 
         if not os.path.isfile(self.templatekit_yaml_path):
-            message = "templatekit.yaml not found in {}".format(self.path)
+            message = f"templatekit.yaml not found in {self.path}"
             raise ValueError(message)
 
     def __str__(self) -> str:
-        return "{0!s}({1!r})".format(self.__class__.__name__, self.name)
+        return f"{self.__class__.__name__!s}({self.name!r})"
 
     def __repr__(self) -> str:
-        return "{0!s}({1!r})".format(self.__class__.__name__, self.name)
+        return f"{self.__class__.__name__!s}({self.name!r})"
 
     @property
     def name(self) -> str:
@@ -326,7 +323,7 @@ class BaseTemplate(object):
         return os.path.join(self.path, "cookiecutter.json")
 
     @property
-    def cookiecutter(self) -> Dict[str, Any]:
+    def cookiecutter(self) -> dict[str, Any]:
         """The data from the ``cookiecutter.json`` file."""
         if self._cookiecutter_data is None:
             with open(self.cookiecutter_json_path) as f:
@@ -379,7 +376,7 @@ class ProjectTemplate(BaseTemplate):
     """
 
 
-@functools.lru_cache()
+@functools.lru_cache
 def get_config_validator() -> cerberus.Validator:
     """Get a validator for ``templatekit.yaml`` configuration files.
 
@@ -392,8 +389,7 @@ def get_config_validator() -> cerberus.Validator:
     """
     configpath = Path(__file__).parent / "configschema.yaml"
     schema = yaml.safe_load(configpath.read_text())
-    validator = cerberus.Validator(schema, purge_unknown=True)
-    return validator
+    return cerberus.Validator(schema, purge_unknown=True)
 
 
 class TemplateConfig(collections.abc.Mapping):
@@ -411,15 +407,11 @@ class TemplateConfig(collections.abc.Mapping):
     keys in a dictionary.
     """
 
-    def __init__(self, data: Dict[str, Any]):
+    def __init__(self, data: dict[str, Any]) -> None:
         self.data = data
         self._validator = get_config_validator()
 
         if self._validator.validate(data) is False:
-            print("Validation errors:")
-            print(json.dumps(self._validator.errors, sort_keys=True, indent=2))
-            print("Data:")
-            print(json.dumps(data, sort_keys=True, indent=2))
             raise RuntimeError("Configuration syntax error")
 
         # Apply Cereberus's schema-based normalization
@@ -432,8 +424,7 @@ class TemplateConfig(collections.abc.Mapping):
         return len(self.data)
 
     def __iter__(self) -> Iterator[str]:
-        for k in self.data:
-            yield k
+        yield from self.data
 
     def normalize(self, template: BaseTemplate) -> TemplateConfig:
         """Normalize the template configuration by adding defaults for any
@@ -464,7 +455,7 @@ class TemplateConfig(collections.abc.Mapping):
                 if key.startswith("_"):
                     # skip things like "_extensions"
                     continue
-                elif isinstance(template.cookiecutter[key], str):
+                if isinstance(template.cookiecutter[key], str):
                     data["dialog_fields"].append(
                         {
                             "key": key,
@@ -490,7 +481,7 @@ class TemplateConfig(collections.abc.Mapping):
         return TemplateConfig(data)
 
     def _normalize_select_field(
-        self, field: Dict[str, Any], template: BaseTemplate
+        self, field: dict[str, Any], template: BaseTemplate
     ) -> None:
         """Normalize a "select" component field.
 
@@ -515,8 +506,8 @@ class TemplateConfig(collections.abc.Mapping):
                 )
 
     def _normalize_text_field(
-        self, field: Dict[str, Any], template: BaseTemplate
-    ) -> Dict[str, Any]:
+        self, field: dict[str, Any], template: BaseTemplate
+    ) -> dict[str, Any]:
         """Normalize text field components.
 
         - Add placeholder information found in the cookiecutter.json file

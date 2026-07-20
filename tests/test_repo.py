@@ -1,5 +1,4 @@
-"""Test the templatekit.repo.Repo class.
-"""
+"""Test the templatekit.repo.Repo class."""
 
 import contextlib
 import os

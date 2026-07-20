@@ -1,5 +1,4 @@
-"""Tests for the templatekit.filerender module.
-"""
+"""Tests for the templatekit.filerender module."""
 
 import os
 

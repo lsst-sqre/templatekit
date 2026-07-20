@@ -1,13 +1,13 @@
-"""Rendering file templates with Cookiecutter.
-"""
+"""Rendering file templates with Cookiecutter."""
 
-__all__ = ("render_file_template", "render_and_write_file_template")
+from __future__ import annotations
 
-import io
+__all__ = ("render_and_write_file_template", "render_file_template")
+
 import logging
 import os
 import shutil
-from typing import Any, Dict, Optional
+from typing import Any
 
 from cookiecutter.environment import StrictEnvironment
 from cookiecutter.generate import generate_context
@@ -19,7 +19,7 @@ from jinja2.exceptions import TemplateSyntaxError
 def render_file_template(
     template_path: str,
     use_defaults: bool = False,
-    extra_context: Optional[Dict[str, Any]] = None,
+    extra_context: dict[str, Any] | None = None,
 ) -> str:
     """Render a single-file template with Cookiecutter.
 
@@ -71,15 +71,13 @@ def render_file_template(
         # information about syntax error location
         exception.translated = False
         raise
-    rendered_text = tmpl.render(**context)
-
-    return rendered_text
+    return tmpl.render(**context)
 
 
 def render_and_write_file_template(
     template_path: str,
     output_path: str,
-    extra_context: Optional[Dict[str, Any]] = None,
+    extra_context: dict[str, Any] | None = None,
 ) -> None:
     """Render a single-file template and write it to the filesystem.
 
@@ -93,7 +91,7 @@ def render_and_write_file_template(
         Optional dictionary of key-value pairs that override defaults in the
         ``cookiecutter.json`` file.
 
-    See also
+    See Also
     --------
     render_file_template
     """
@@ -103,8 +101,8 @@ def render_and_write_file_template(
         template_path, use_defaults=True, extra_context=extra_context
     )
 
-    logger.debug("Writing rendered file to {}".format(output_path))
-    with io.open(output_path, "w", encoding="utf-8") as fh:
+    logger.debug(f"Writing rendered file to {output_path}")
+    with open(output_path, "w", encoding="utf-8") as fh:
         fh.write(rendered_text)
 
     # Apply file permissions to output file

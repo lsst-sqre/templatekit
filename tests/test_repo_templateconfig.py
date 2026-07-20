@@ -1,8 +1,8 @@
-"""Tests for the templatekit.repo.TemplateConfig class.
-"""
+"""Tests for the templatekit.repo.TemplateConfig class."""
+
+from __future__ import annotations
 
 from pathlib import Path
-from typing import Dict, List
 from unittest.mock import Mock
 
 import cerberus
@@ -27,7 +27,7 @@ def test_templateconfig_valid() -> None:
     # Test mapping methods
     assert config["name"] == "Python"
     assert len(config) == 3
-    assert set(["name", "group", "dialog_title"]) == set([k for k in config])
+    assert {"name", "group", "dialog_title"} == set(config)
 
 
 def test_templateconfig_invalid() -> None:
@@ -37,7 +37,7 @@ def test_templateconfig_invalid() -> None:
 
 
 def test_templateconfig_normalize_name() -> None:
-    configdata: Dict[str, List[str]] = {"dialog_fields": []}
+    configdata: dict[str, list[str]] = {"dialog_fields": []}
 
     mock_template = Mock(spec=FileTemplate)
     mock_template.name = "my_template"
@@ -50,7 +50,7 @@ def test_templateconfig_normalize_name() -> None:
 
 
 def test_implicitselect() -> None:
-    """Test building a configuration from tests/data/config/implicitselect
+    """Test building a configuration from tests/data/config/implicitselect.
 
     This shows how a select menu would work.
     """

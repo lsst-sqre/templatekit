@@ -1,16 +1,15 @@
-"""Generic utilities for working with text content.
-"""
+"""Generic utilities for working with text content."""
+
+from __future__ import annotations
 
 __all__ = ("reformat_content_lines",)
-
-from typing import Optional
 
 
 def reformat_content_lines(
     content: str,
     fmt: str,
-    header: Optional[str] = None,
-    footer: Optional[str] = None,
+    header: str | None = None,
+    footer: str | None = None,
 ) -> str:
     """Apply a (new-style) Python format expression to each line of a string
     content block.
