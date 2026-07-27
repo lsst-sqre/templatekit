@@ -102,7 +102,6 @@ target-version = "py38"
 
 [tool.ruff.lint.isort]
 known-first-party = ["templatekit", "tests"]
-split-on-trailing-comma = false
 
 [tool.ruff.lint.extend-per-file-ignores]
 # Pre-existing os.path usage and other judgment-call findings from
