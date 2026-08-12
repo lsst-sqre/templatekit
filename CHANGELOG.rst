@@ -2,6 +2,16 @@
 Change log
 ##########
 
+0.7.0 (2026-07-20)
+==================
+
+- Adopt ruff for linting and formatting, retiring black, flake8, and isort.
+  The pre-commit hooks, ``pyproject.toml`` configuration, and vendored ``ruff-shared.toml`` were updated accordingly, and the codebase was reformatted and re-linted to match.
+- Refresh pre-commit hook versions (``pre-commit-hooks``, ``ruff-pre-commit``) as part of the routine monthly pre-commit autoupdate.
+- Bump GitHub Actions versions: ``actions/checkout`` (v4 to v7), ``pre-commit/action`` (3.0.0 to 3.0.1), and ``lsst-sqre/build-and-publish-to-pypi`` (v2 to v3).
+- Remove a now-unneeded ``type: ignore`` annotation now that GitPython ships more accurate types.
+- Pick up several accumulated Neophile-driven pre-commit hook bumps (``pre-commit-hooks``, ``black``, ``flake8``, ``isort``) from before the ruff migration.
+
 0.6.0 (2023-10-13)
 ==================
 
