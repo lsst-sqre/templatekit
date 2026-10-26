@@ -52,7 +52,7 @@ dev = [
     "ruff",
     "types-PyYAML",
     # documentation
-    "documenteer[guide]",
+    "documenteer[guide]==2.5.0b4",
     "sphinx-click",
 ]
 

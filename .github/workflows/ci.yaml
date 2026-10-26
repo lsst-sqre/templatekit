@@ -52,6 +52,12 @@ jobs:
 
   docs:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    env:
+      HAS_OOK_TOKEN: ${{ secrets.OOK_TOKEN != '' }}
 
     steps:
       - uses: actions/checkout@v7
@@ -66,21 +72,30 @@ jobs:
         with:
           python-version: "3.12"
           tox-envs: "docs"
+        env:
+          OOK_TOKEN: ${{ secrets.OOK_TOKEN }}
 
-      # Only attempt documentation uploads for tagged releases and pull
-      # requests from ticket branches in the same repository.  This avoids
-      # version clutter in the docs and failures when a PR doesn't have access
-      # to secrets.
-      - name: Upload to LSST the Docs
-        uses: lsst-sqre/ltd-upload@v1
+      - name: Check links
+        uses: lsst-sqre/run-tox@v1
+        if: env.HAS_OOK_TOKEN == 'true'
+        with:
+          python-version: "3.12"
+          tox-envs: "docs-linkcheck"
+        env:
+          OOK_TOKEN: ${{ secrets.OOK_TOKEN }}
+
+      - name: Upload to Docverse
+        uses: lsst-sqre/docverse-upload@v1
+        with:
+          org: rubin
+          project: "templatekit"
+          dir: "docs/_build/html"
+          token: ${{ secrets.DOCVERSE_TOKEN }}
+          github-token: ${{ github.token }}
+          comment-on-pr: "true"
         if: >
           github.event_name != 'pull_request'
           || startsWith(github.head_ref, 'tickets/')
-        with:
-          project: "templatekit"
-          dir: "docs/_build/html"
-          username: ${{ secrets.LTD_USERNAME }}
-          password: ${{ secrets.LTD_PASSWORD }}
 
   test-packaging:
     name: Test packaging
