@@ -51,9 +51,6 @@ dev = [
     "pytest-cov",
     "ruff",
     "types-PyYAML",
-    # documentation
-    "documenteer[guide]",
-    "sphinx-click",
 ]
 
 [project.urls]
@@ -62,6 +59,12 @@ Source = "https://github.com/lsst-sqre/templatekit"
 
 [project.scripts]
 templatekit = "templatekit.scripts.main:main"
+
+[dependency-groups]
+docs = [
+    "documenteer[guide]==2.5.0b4",
+    "sphinx-click",
+]
 
 [build-system]
 requires = ["setuptools>=61", "wheel", "setuptools_scm[toml]>=6.2"]

@@ -57,7 +57,7 @@ Change log
   These files, which get added alongside ``cookiecutter.json`` files, refine the presentation of templates in Slack user interactions (see the Templatebot_ project).
   For example, templates have nice names (``name`` field) and can be grouped in selection menus (``group_name`` field).
   The ``dialog_fields`` field provides configuration for fields in the Slack dialogs where a user configures their new file or project.
-- `Cerberus <http://docs.python-cerberus.org/en/stable/index.html>`_ is a new dependency of Templatekit.
+- `Cerberus <https://docs.python-cerberus.org/>`_ is a new dependency of Templatekit.
   ``templatekit.yaml`` files are validated against a Cerberus schema.
 
 0.1.1 (2019-01-07)
@@ -76,7 +76,7 @@ Change log
 
 - Sphinx documentation site.
 
-(`DM-16940 <https://jira.lsstcorp.org/browse/DM-16940>`__)
+(`DM-16940 <https://rubinobs.atlassian.net/browse/DM-16940>`__)
 
 .. _Templatebot: https://github.com/lsst-sqre/templatebot
 .. _GitPython: https://gitpython.readthedocs.io/en/stable/index.html
