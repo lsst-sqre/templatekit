@@ -35,7 +35,7 @@ See :ref:`dev-change-log` in the *Developer guide* for details.
 2. Update the templates submodule
 ---------------------------------
 
-Templatekit uses a submodule of the `templates repository <https://github.com/lsst-sqre/templates/>`__ as test data.
+Templatekit uses a submodule of the `templates repository <https://github.com/lsst/templates/>`__ as test data.
 Git submodules are pinned to a specific release, so this will not automatically pick up the latest changes to the templates.
 
 To ensure that Templatekit works properly with the latest templates, and to avoid letting the test data fall too far behind, the submodule should be updated before each release.
