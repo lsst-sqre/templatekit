@@ -7,7 +7,7 @@ This information is only useful for maintainers.
 
 Templatekit's releases are largely automated through GitHub Actions (see the `ci.yaml`_ workflow file for details).
 When a semantic version tag is pushed to GitHub, `Templatekit is released to PyPI`_ with that version.
-Similarly, documentation is built and pushed for each version (see https://templatekit.lsst.io/v).
+Similarly, documentation is built and pushed for each version (see https://templatekit.lsst.io/v/).
 
 .. _`Templatekit is released to PyPI`: https://pypi.org/project/templatekit/
 .. _`ci.yaml`: https://github.com/lsst-sqre/templatekit/blob/master/.github/workflows/ci.yaml
@@ -59,7 +59,7 @@ At the HEAD of the ``master`` branch, create and push a tag with the semantic ve
 The tag **must** follow the :pep:`440` specification since Templatekit uses setuptools_scm_ to set version metadata based on Git tags.
 In particular, **don't** prefix the tag with ``v``.
 
-.. _setuptools_scm: https://github.com/pypa/setuptools_scm
+.. _setuptools_scm: https://github.com/pypa/setuptools-scm
 
 The `ci.yaml`_ GitHub Actions workflow uploads the new release to PyPI and documentation to https://templatekit.lsst.io.
 

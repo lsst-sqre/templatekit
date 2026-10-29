@@ -76,7 +76,7 @@ Change log
 
 - Sphinx documentation site.
 
-(`DM-16940 <https://jira.lsstcorp.org/browse/DM-16940>`__)
+(`DM-16940 <https://rubinobs.atlassian.net/browse/DM-16940>`__)
 
 .. _Templatebot: https://github.com/lsst-sqre/templatebot
 .. _GitPython: https://gitpython.readthedocs.io/en/stable/index.html
